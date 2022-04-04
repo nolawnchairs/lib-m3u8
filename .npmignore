@@ -1,0 +1,6 @@
+src
+test
+lib/*.js.map
+.gitignore
+dts-config.json
+ts*.json
