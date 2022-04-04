@@ -41,14 +41,6 @@ module.exports = {
       "never"
     ],
     "@typescript-eslint/naming-convention": [0],
-    "@typescript-eslint/no-restricted-imports": ["error", {
-      "patterns": [
-        {
-          "group": [".*"],
-          "message": "Relative imports not allowed. Use @lib module aliasing",
-        }
-      ],
-    }],
     "comma-dangle": [
       "error",
       "always-multiline"
