@@ -67,6 +67,6 @@ export class M3u8Slice implements IM3u8Producer {
       ...this.meta.map(({ content }) => content),
       ...this.segments.map(({ meta, source }) => [...meta.map(({ content }) => content), source].join('\n')),
       this.terminate ? M3u8Tag.EXT_X_ENDLIST : '',
-    ].join('\n')
+    ].join('\n').trim()
   }
 }
