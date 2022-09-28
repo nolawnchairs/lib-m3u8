@@ -2,6 +2,7 @@
 import { M3u8LineType } from '../src/enums/m3u8-line-type'
 import { IM3u8Line } from '../src/interfaces/m3u8-line.interface'
 import { M3u8Parser } from '../src/util/m3u8-parser.util'
+import { MasterM3u8 } from '../src/master-m3u8.class'
 
 const SPECIMEN = `
 #EXTM3U
@@ -15,9 +16,11 @@ const SPECIMEN = `
 describe('Parsing a master.m3u8 file', () => {
 
   let example: IM3u8Line[]
+  let m3u8: MasterM3u8
 
   beforeEach(() => {
     example = M3u8Parser.parse(SPECIMEN)
+    m3u8 = new MasterM3u8(SPECIMEN)
   })
 
   it('should parse to 6 lines', () => {
@@ -56,5 +59,6 @@ describe('Parsing a master.m3u8 file', () => {
 
   it('should find a total of 2 variants', () => {
     expect(example.filter(line => line.type === M3u8LineType.VARIANT_META).length).toBe(2)
+    expect(m3u8.variants.length).toBe(2)
   })
 })

@@ -14,14 +14,14 @@ export class MasterM3u8 extends M3u8 {
   }
 
   /**
-   * Returns all the media variants in the master playlist
+   * The media variants in the master playlist
    *
    * @return {*}  {string[]}
    * @memberof MasterM3u8
    */
-  getVariants(): string[] {
+  get variants(): string[] {
     return this.lines
-      .filter(({ type }) => type === M3u8LineType.SEGMENT_SRC)
+      .filter(({ type }) => type === M3u8LineType.VARIANT_SRC)
       .map(({ content }) => content)
   }
 }
