@@ -2,5 +2,6 @@ src
 test
 *.js.map
 .gitignore
+.git
 dts-config.json
 ts*.json

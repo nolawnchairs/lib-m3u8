@@ -1,6 +1,4 @@
 
-# Library Template
+# Lib M3U8
 
-This repository contains boilerplate for creating shared/common libraries among our application constellation.
-
-Fork into a new library repository
+A library to parse and create variants of M3u8 manifest files. Documentation to follow.

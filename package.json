@@ -1,13 +1,13 @@
 {
-  "name": "@knightinteractive/lib-template",
+  "name": "@knightinteractive/lib-m3u8",
   "version": "1.0.0",
-  "description": "Template for bootstrapping shared libraries",
+  "description": "Library for parsing, manipulating and producing ad-hoc m3u8 files for HLS",
   "main": "index.js",
   "author": "Mike <nolawnchairs@gmail.com>",
-  "homepage": "https://bitbucket.org/knightinteractive/lib-template",
+  "homepage": "https://bitbucket.org/knightinteractive/lib-m3u8",
   "repository": {
     "type": "git",
-    "url": "https://bitbucket.org/knightinteractive/lib-template"
+    "url": "https://bitbucket.org/knightinteractive/lib-m3u8"
   },
   "license": "ISC",
   "jest": {
