@@ -57,6 +57,10 @@ export class M3u8Slice implements IM3u8Producer {
     }
   }
 
+  /**
+   * @memberof M3u8Slice
+   * @inheritdoc
+   */
   marshal(): string {
     return [
       M3u8Tag.EXT_M3U,
