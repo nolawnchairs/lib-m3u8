@@ -43,14 +43,14 @@ export class M3u8Slicer {
   /**
    * Slice the m3u8 subject into a new manifest for a live stream
    *
-   * @param {number} sequence the value to set the EXT-X-MEDIA-SEQUENCE to
-   * @param {number} startSegment the index of the first segment to include in the slice
-   * @param {number} takeSegments the number of segments to include in the slice
+   * @param {number} sequence the value for the EXT-X-MEDIA-SEQUENCE tag
+   * @param {number} start the index of the first segment to include in the slice
+   * @param {number} count the number of segments to include in the slice
    * @return {*}  {M3u8Slice}
    * @memberof M3u8Slicer
    */
-  toLiveSlice(sequence: number, startSegment: number, takeSegments: number): M3u8Slice {
-    const lastSegment = startSegment + takeSegments
+  toLiveSlice(sequence: number, start: number, count: number): M3u8Slice {
+    const last = start + count
     const meta = [
       this.m3u8.findLineByTag(M3u8Tag.EXT_X_VERSION),
       this.m3u8.findLineByTag(M3u8Tag.EXT_X_TARGETDURATION),
@@ -59,14 +59,14 @@ export class M3u8Slicer {
     ]
 
     const segments = this.marshalSegments(
-      this.m3u8.segments.slice(startSegment, lastSegment)
+      this.m3u8.segments.slice(start, last)
     )
 
     return new M3u8Slice(
       meta,
       segments,
-      startSegment * this.targetDurationMillis,
-      segments.length < takeSegments,
+      start * this.targetDurationMillis,
+      segments.length < count,
       false
     )
   }
@@ -74,13 +74,13 @@ export class M3u8Slicer {
   /**
    * Slice the m3u8 subject into a new manifest for a video-on-demand
    *
-   * @param {number} startSegment the index of the first segment to include in the slice
-   * @param {number} takeSegments the number of segments to include in the slice
+   * @param {number} start the index of the first segment to include in the slice
+   * @param {number} count the number of segments to include in the slice
    * @return {*}  {M3u8Slice}
    * @memberof M3u8Slicer
    */
-  toVodSlice(startSegment: number, takeSegments: number): M3u8Slice {
-    const lastSegment = startSegment + takeSegments
+  toVodSlice(start: number, count: number): M3u8Slice {
+    const last = start + count
     const meta = [
       this.m3u8.findLineByTag(M3u8Tag.EXT_X_VERSION),
       this.m3u8.findLineByTag(M3u8Tag.EXT_X_TARGETDURATION),
@@ -89,13 +89,13 @@ export class M3u8Slicer {
     ]
 
     const segments = this.marshalSegments(
-      this.m3u8.segments.slice(startSegment, lastSegment)
+      this.m3u8.segments.slice(start, last)
     )
 
     return new M3u8Slice(
       meta,
       segments,
-      startSegment * this.targetDurationMillis,
+      start * this.targetDurationMillis,
       true,
       true
     )
@@ -104,8 +104,8 @@ export class M3u8Slicer {
   /**
    * Slice the m3u8 subject into a new manifest for a live stream transition
    *
-   * @param {number} sequence the value to set the EXT-X-MEDIA-SEQUENCE to
-   * @param {number} segmentIndex the index of the first segment to include in the slice
+   * @param {number} sequence the value for the EXT-X-MEDIA-SEQUENCE tag
+   * @param {number} segmentIndex the index of the segment from which to start the transition
    * @param {M3u8Slicer} next the slicer instance to which the transition will be applied
    * @return {*}  {M3u8Slice}
    * @memberof M3u8Slicer
