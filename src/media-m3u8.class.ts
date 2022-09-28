@@ -40,4 +40,14 @@ export class MediaM3u8 extends M3u8 {
       lastIndex += metaLines.length + 1
     }
   }
+
+  /**
+   * Get the total segments count
+   *
+   * @return {*}  {number}
+   * @memberof MediaM3u8
+   */
+  segmentCount(): number {
+    return this.segments.length
+  }
 }
