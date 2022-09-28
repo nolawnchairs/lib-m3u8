@@ -3,6 +3,7 @@ import { M3u8LineType } from '../src/enums/m3u8-line-type'
 import { M3u8Tag } from '../src/enums/m3u8-tag.enum'
 import { IM3u8Line } from '../src/interfaces/m3u8-line.interface'
 import { M3u8Parser } from '../src/util/m3u8-parser.util'
+import { MediaM3u8 } from '../src/media-m3u8.class'
 
 const SPECIMEN = `
 #EXTM3U
@@ -38,10 +39,11 @@ const SPECIMEN = `
 describe('parsing a media m3u8 file', () => {
 
   let example: IM3u8Line[] = []
+  let m3u8: MediaM3u8
 
   beforeEach(() => {
     example = M3u8Parser.parse(SPECIMEN)
-
+    m3u8 = new MediaM3u8(SPECIMEN)
   })
 
   it('should parse to 28 lines', () => {
@@ -101,5 +103,17 @@ describe('parsing a media m3u8 file', () => {
   it('should identify the end list', () => {
     expect(example[example.length - 1].type).toBe(M3u8LineType.FOOTER)
     expect(example[example.length - 1].content).toBe('#EXT-X-ENDLIST')
+  })
+
+  it('should parse to a working m3u8 instance', () => {
+    expect(m3u8.meta.length).toBe(5)
+    expect(m3u8.segments.length).toBe(10)
+    expect(m3u8.segmentCount()).toBe(10)
+    expect(m3u8.segments[0].source).toBe('960x540-2000kbps_f8a1ae2a59a2b2f7.ts')
+    expect(m3u8.segments[0].duration).toBe(6.006)
+    expect(m3u8.segments[0].meta.length).toBe(2)
+    expect(m3u8.segments[0].meta[0].content).toContain('0xb7cb82dd5e12261c81eb13eba84e9ca3')
+    expect(m3u8.segments[0].meta[1].tag).toBe(M3u8Tag.EXTINF)
+    expect(m3u8.segments[1].meta.length).toBe(1)
   })
 })
