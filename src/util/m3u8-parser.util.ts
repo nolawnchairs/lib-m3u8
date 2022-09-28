@@ -85,7 +85,7 @@ export namespace M3u8Parser {
 
       // Detect if a line is a variant source, by checking if the previous line is a variant meta tag
       if (i > 1 && m3u8Lines[i - 1]?.type == M3u8LineType.VARIANT_META) {
-        m3u8Lines.push({ type: M3u8LineType.VARIANT_SRC, content: line, ...parseContentLine(line) })
+        m3u8Lines.push({ type: M3u8LineType.VARIANT_SRC, content: line, value: line })
         continue
       }
 
