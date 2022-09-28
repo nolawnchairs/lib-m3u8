@@ -17,7 +17,7 @@
       "ts"
     ],
     "rootDir": "test",
-    "testRegex": ".*\\.spec\\.ts$",
+    "testRegex": ".*\\.spec\\.[jt]s$",
     "transform": {
       "^.+\\.ts$": "ts-jest"
     },
@@ -44,6 +44,7 @@
     "prebuild": "rm -rf ./lib",
     "test-runner": "jest --watchAll",
     "define": "dts-bundle-generator --config ./dts-config.json",
-    "build": "npm run prebuild && tsc && npm run define"
+    "build": "npm run prebuild && tsc && npm run define",
+    "publish": "npm run build && npm test && npm publish"
   }
 }
