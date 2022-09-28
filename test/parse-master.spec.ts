@@ -55,6 +55,8 @@ describe('Parsing a master.m3u8 file', () => {
   it('should correctly find the second variant source', () => {
     expect(example[5].type).toBe(M3u8LineType.VARIANT_SRC)
     expect(example[5].content).toBe('640x360-365kbps.m3u8')
+    expect(m3u8.variants[0]).toBe('1920x1080-365kbps.m3u8')
+    expect(m3u8.variants[1]).toBe('640x360-365kbps.m3u8')
   })
 
   it('should find a total of 2 variants', () => {
