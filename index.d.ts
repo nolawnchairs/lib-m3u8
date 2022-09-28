@@ -60,6 +60,10 @@ export declare class M3u8Slice implements IM3u8Producer {
 	 * @memberof M3u8Slice
 	 */
 	appendDiscontinuity(nextSlice: M3u8Slice): void;
+	/**
+	 * @memberof M3u8Slice
+	 * @inheritdoc
+	 */
 	marshal(): string;
 }
 export declare class M3u8Slicer {
