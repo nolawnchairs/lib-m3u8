@@ -9,7 +9,7 @@
             "output": {
                 "inlineDeclareGlobals": false,
                 "sortNodes": true,
-                "umdModuleName": "MyModuleName"
+                "umdModuleName": "MontageM3u8Lib"
             }
         }
     ]
