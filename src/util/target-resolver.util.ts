@@ -12,4 +12,18 @@ export class TargetResolver {
     readonly resolveEncryptionKeyUrl: Resolver,
     readonly resolveSourcePathUrl: Resolver
   ) { }
+
+  /**
+   * The default resolver that does not modify the original values
+   *
+   * @static
+   * @return {*}  {TargetResolver}
+   * @memberof TargetResolver
+   */
+  static default(): TargetResolver {
+    return new TargetResolver(
+      (originalValue: string) => originalValue,
+      (originalValue: string) => originalValue
+    )
+  }
 }
