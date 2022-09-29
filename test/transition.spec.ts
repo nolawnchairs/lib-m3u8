@@ -12,29 +12,29 @@ const FROM = `
 #EXT-X-INDEPENDENT-SEGMENTS
 #EXT-X-KEY:METHOD=AES-128,URI="encryption.key",IV=0xb7cb82dd5e12261c81eb13eba84e9ca3
 #EXTINF:6.006000,
-0-from.ts
+0.ts
 #EXTINF:6.006000,
-1-from.ts
+1.ts
 #EXTINF:6.006000,
-2-from.ts
+2.ts
 #EXTINF:6.006000,
-3-from.ts
+3.ts
 #EXTINF:6.006000,
-4-from.ts
+4.ts
 #EXTINF:6.006000,
-5-from.ts
+5.ts
 #EXTINF:6.006000,
-6-from.ts
+6.ts
 #EXTINF:5.972633,
-7-from.ts
+7.ts
 #EXTINF:6.006000,
-8-from.ts
+8.ts
 #EXTINF:6.006000,
-9-from.ts
+9.ts
 #EXTINF:6.006000,
-10-from.ts
+10.ts
 #EXTINF:2.068733,
-11-from.ts
+11.ts
 #EXT-X-ENDLIST
 `
 const TO = `
@@ -44,31 +44,31 @@ const TO = `
 #EXT-X-MEDIA-SEQUENCE:0
 #EXT-X-PLAYLIST-TYPE:VOD
 #EXT-X-INDEPENDENT-SEGMENTS
-#EXT-X-KEY:METHOD=AES-128,URI="encryption.key",IV=0xb7cb82dd5e12261c81eb13eba84e9ca3
+#EXT-X-KEY:METHOD=AES-128,URI="encryption.key",IV=0xb7cb82dd5e12261c81eb13eba84e9ca4
 #EXTINF:6.006000,
-0-to.ts
+0.ts
 #EXTINF:6.006000,
-1-to.ts
+1.ts
 #EXTINF:6.006000,
-2-to.ts
+2.ts
 #EXTINF:6.006000,
-3-to.ts
+3.ts
 #EXTINF:6.006000,
-4-to.ts
+4.ts
 #EXTINF:6.006000,
-5-to.ts
+5.ts
 #EXTINF:6.006000,
-6-to.ts
+6.ts
 #EXTINF:5.972633,
-7-to.ts
+7.ts
 #EXTINF:6.006000,
-8-to.ts
+8.ts
 #EXTINF:6.006000,
-9-to.ts
+9.ts
 #EXTINF:6.006000,
-10-to.ts
+10.ts
 #EXTINF:2.068733,
-11-to.ts
+11.ts
 #EXT-X-ENDLIST
 `
 describe('transition slices', () => {
@@ -79,61 +79,88 @@ describe('transition slices', () => {
   let fromSlicer: M3u8Slicer
   let toSlicer: M3u8Slicer
 
-  const resolver = new TargetResolver(
-    keyLine => keyLine,
-    value => value
+  const fromResolver = new TargetResolver(
+    key => key,
+    src => `from/${src}`,
+  )
+
+  const toResolver = new TargetResolver(
+    key => key,
+    src => `to/${src}`,
   )
 
   beforeEach(() => {
-    fromSlicer = new M3u8Slicer(from, resolver)
-    toSlicer = new M3u8Slicer(to, resolver)
+    fromSlicer = new M3u8Slicer(from, fromResolver)
+    toSlicer = new M3u8Slicer(to, toResolver)
   })
 
   it('should create a slice without an active transition', () => {
     const transition = fromSlicer.toLiveTransitionSlice(0, 0, toSlicer)
     expect(transition.segments.length).toBe(3)
-    expect(transition.segments[0].source).toEqual('0-from.ts')
-    expect(transition.segments[1].source).toEqual('1-from.ts')
-    expect(transition.segments[2].source).toEqual('2-from.ts')
+    expect(transition.segments[0].source).toEqual('from/0.ts')
+    expect(transition.segments[1].source).toEqual('from/1.ts')
+    expect(transition.segments[2].source).toEqual('from/2.ts')
+    expect(transition.marshal().split('\n').length).toBe(12)
   })
 
   it('should create a slice with the transition at the last segment', () => {
     const transition = fromSlicer.toLiveTransitionSlice(0, 1, toSlicer)
+    const marshalled = transition.marshal().split('\n')
     expect(transition.segments.length).toBe(3)
-    expect(transition.segments[0].source).toEqual('1-from.ts')
-    expect(transition.segments[1].source).toEqual('2-from.ts')
-    expect(transition.segments[2].source).toEqual('3-to.ts')
+    expect(transition.segments[0].source).toEqual('from/1.ts')
+    expect(transition.segments[1].source).toEqual('from/2.ts')
+    expect(transition.segments[2].source).toEqual('to/3.ts')
+    expect(marshalled.length).toBe(14)
+    expect(marshalled[10]).toBe('#EXT-X-DISCONTINUITY')
+    expect(marshalled[11]).toContain('#EXT-X-KEY')
+    expect(marshalled[12]).toContain('#EXTINF')
   })
 
   it('should create a slice with the transition at the middle segment', () => {
     const transition = fromSlicer.toLiveTransitionSlice(0, 2, toSlicer)
+    const marshalled = transition.marshal().split('\n')
     expect(transition.segments.length).toBe(3)
-    expect(transition.segments[0].source).toEqual('2-from.ts')
-    expect(transition.segments[1].source).toEqual('3-to.ts')
-    expect(transition.segments[2].source).toEqual('4-to.ts')
+    expect(transition.segments[0].source).toEqual('from/2.ts')
+    expect(transition.segments[1].source).toEqual('to/3.ts')
+    expect(transition.segments[2].source).toEqual('to/4.ts')
+    expect(marshalled.length).toBe(14)
+    expect(marshalled[8]).toBe('#EXT-X-DISCONTINUITY')
+    expect(marshalled[9]).toContain('#EXT-X-KEY')
+    expect(marshalled[10]).toContain('#EXTINF')
   })
 
   it('should cycle back to without transition', () => {
     const transition = fromSlicer.toLiveTransitionSlice(0, 3, toSlicer)
     expect(transition.segments.length).toBe(3)
-    expect(transition.segments[0].source).toEqual('3-from.ts')
-    expect(transition.segments[1].source).toEqual('4-from.ts')
-    expect(transition.segments[2].source).toEqual('5-from.ts')
+    expect(transition.segments[0].source).toEqual('from/3.ts')
+    expect(transition.segments[1].source).toEqual('from/4.ts')
+    expect(transition.segments[2].source).toEqual('from/5.ts')
+    expect(transition.marshal().split('\n').length).toBe(12)
   })
 
   it('should cycle back to a slice with the transition at the last segment', () => {
     const transition = fromSlicer.toLiveTransitionSlice(0, 4, toSlicer)
+    const marshalled = transition.marshal().split('\n')
     expect(transition.segments.length).toBe(3)
-    expect(transition.segments[0].source).toEqual('4-from.ts')
-    expect(transition.segments[1].source).toEqual('5-from.ts')
-    expect(transition.segments[2].source).toEqual('6-to.ts')
+    expect(transition.segments[0].source).toEqual('from/4.ts')
+    expect(transition.segments[1].source).toEqual('from/5.ts')
+    expect(transition.segments[2].source).toEqual('to/6.ts')
+    expect(transition.marshal().split('\n').length).toBe(14)
+    expect(marshalled[10]).toBe('#EXT-X-DISCONTINUITY')
+    expect(marshalled[11]).toContain('#EXT-X-KEY')
+    expect(marshalled[12]).toContain('#EXTINF')
   })
 
   it('should cycle back to a slice with the transition at the middle segment', () => {
     const transition = fromSlicer.toLiveTransitionSlice(0, 5, toSlicer)
+    const marshalled = transition.marshal().split('\n')
     expect(transition.segments.length).toBe(3)
-    expect(transition.segments[0].source).toEqual('5-from.ts')
-    expect(transition.segments[1].source).toEqual('6-to.ts')
-    expect(transition.segments[2].source).toEqual('7-to.ts')
+    expect(transition.segments[0].source).toEqual('from/5.ts')
+    expect(transition.segments[1].source).toEqual('to/6.ts')
+    expect(transition.segments[2].source).toEqual('to/7.ts')
+    expect(transition.marshal().split('\n').length).toBe(14)
+    expect(marshalled[8]).toBe('#EXT-X-DISCONTINUITY')
+    expect(marshalled[9]).toContain('#EXT-X-KEY')
+    expect(marshalled[10]).toContain('#EXTINF')
   })
 })
