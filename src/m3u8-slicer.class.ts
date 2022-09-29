@@ -112,10 +112,10 @@ export class M3u8Slicer {
    */
   toLiveTransitionSlice(sequence: number, segmentIndex: number, next: M3u8Slicer): M3u8Slice {
     const mod = segmentIndex % 3
-    const first = this.toLiveSlice(sequence, segmentIndex, 3 - mod)
-    const second = next.toLiveSlice(sequence, segmentIndex + (mod ? 3 - mod : 0), mod)
-    first.appendDiscontinuity(second)
-    return first
+    const from = this.toLiveSlice(sequence, segmentIndex, 3 - mod)
+    const to = next.toLiveSlice(sequence, segmentIndex + (mod ? 3 - mod : 0), mod)
+    from.appendDiscontinuity(to)
+    return from
   }
 
   /**
