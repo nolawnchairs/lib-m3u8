@@ -32,7 +32,7 @@ export declare class M3u8Slice implements IM3u8Producer {
 	readonly segments: IM3u8MediaSegment[];
 	readonly offsetMillis: number;
 	readonly mediaExhausted: boolean;
-	readonly terminate: boolean;
+	private readonly terminate;
 	/**
 	 * @param {IM3u8Line[]} meta the metadata to include in the slice
 	 * @param {IM3u8MediaSegment[]} segments the media segments to include in the slice
