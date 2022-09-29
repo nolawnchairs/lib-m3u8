@@ -16,6 +16,7 @@ export class MediaM3u8 extends M3u8 {
 
   /**
    * @param {string} content the m3u8-formatted string
+   * @throws {Error} if the content is not a valid media segment manifest
    * @memberof MediaM3u8
    */
   constructor(content: string) {

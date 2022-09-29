@@ -8,6 +8,7 @@ export class MasterM3u8 extends M3u8 {
 
   /**
    * @param {string} content the m3u8-formatted string
+   * @throws {Error} if the content is not a valid master variant manifest
    * @memberof MasterM3u8
    */
   constructor(content: string) {
@@ -15,7 +16,7 @@ export class MasterM3u8 extends M3u8 {
   }
 
   /**
-   * The media variants in the master playlist
+   * The media variants in the manifest
    *
    * @return {*}  {string[]}
    * @memberof MasterM3u8
