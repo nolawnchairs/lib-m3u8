@@ -45,6 +45,6 @@
     "test-runner": "jest --watchAll",
     "define": "dts-bundle-generator --config ./dts-config.json",
     "build": "npm run prebuild && tsc && npm run define",
-    "publish": "npm run build && npm test && npm publish"
+    "prepublish": "npm run build && npm test"
   }
 }
