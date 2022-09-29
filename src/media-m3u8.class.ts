@@ -4,9 +4,12 @@ import { M3u8Tag } from './enums/m3u8-tag.enum'
 import { M3u8Type } from './enums/m3u8-type.enum'
 import { IM3u8Line } from './interfaces/m3u8-line.interface'
 import { IM3u8MediaSegment } from './interfaces/m3u8-media-segment.interface'
+import { M3u8Slice } from './m3u8-slice.class'
+import { M3u8Slicer } from './m3u8-slicer.class'
 import { M3u8 } from './m3u8.class'
 import { M3u8Parser } from './util/m3u8-parser.util'
 import { Strings } from './util/string.util'
+import { TargetResolver } from './util/target-resolver.util'
 
 export class MediaM3u8 extends M3u8 {
 
@@ -51,5 +54,17 @@ export class MediaM3u8 extends M3u8 {
    */
   segmentCount(): number {
     return this.segments.length
+  }
+
+  /**
+   * Outputs the contents to an m3u8 slice
+   *
+   * @param {TargetResolver} resolver the url/path target resolver instance
+   * @return {*}  {M3u8Slice}
+   * @memberof MediaM3u8
+   */
+  asSlice(resolver: TargetResolver): M3u8Slice {
+    return new M3u8Slicer(this, resolver)
+      .toVodSlice(0, this.segmentCount())
   }
 }
