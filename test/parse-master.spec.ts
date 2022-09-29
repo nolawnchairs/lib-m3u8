@@ -1,5 +1,5 @@
 
-import { M3u8LineType } from '../src/enums/m3u8-line-type'
+import { M3u8LineType } from '../src/enums/m3u8-line-type.enum'
 import { IM3u8Line } from '../src/interfaces/m3u8-line.interface'
 import { M3u8Parser } from '../src/util/m3u8-parser.util'
 import { MasterM3u8 } from '../src/master-m3u8.class'

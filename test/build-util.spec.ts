@@ -1,5 +1,5 @@
 
-import { M3u8LineType } from '../src/enums/m3u8-line-type'
+import { M3u8LineType } from '../src/enums/m3u8-line-type.enum'
 import { M3u8Tag } from '../src/enums/m3u8-tag.enum'
 import { M3u8Builder } from '../src/util/m3u8-builder.util'
 

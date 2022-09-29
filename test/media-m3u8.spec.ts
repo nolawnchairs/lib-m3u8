@@ -1,5 +1,5 @@
 
-import { M3u8LineType } from '../src/enums/m3u8-line-type'
+import { M3u8LineType } from '../src/enums/m3u8-line-type.enum'
 import { MediaM3u8 } from '../src/media-m3u8.class'
 
 const SPECIMEN = `

@@ -2,7 +2,7 @@
 export type { IM3u8Line } from './interfaces/m3u8-line.interface'
 export type { IM3u8MediaSegment } from './interfaces/m3u8-media-segment.interface'
 export type { IM3u8Producer } from './interfaces/m3u8-producer.interface'
-export { M3u8LineType } from './enums/m3u8-line-type'
+export { M3u8LineType } from './enums/m3u8-line-type.enum'
 export { M3u8Tag } from './enums/m3u8-tag.enum'
 export { M3u8Slice } from './m3u8-slice.class'
 export { M3u8Slicer } from './m3u8-slicer.class'

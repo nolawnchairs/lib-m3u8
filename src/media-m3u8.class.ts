@@ -1,5 +1,5 @@
 
-import { M3u8LineType } from './enums/m3u8-line-type'
+import { M3u8LineType } from './enums/m3u8-line-type.enum'
 import { M3u8Tag } from './enums/m3u8-tag.enum'
 import { IM3u8Line } from './interfaces/m3u8-line.interface'
 import { IM3u8MediaSegment } from './interfaces/m3u8-media-segment.interface'
