@@ -1,5 +1,6 @@
 
 import { M3u8LineType } from './enums/m3u8-line-type.enum'
+import { M3u8Type } from './enums/m3u8-type.enum'
 import { M3u8 } from './m3u8.class'
 import { M3u8Parser } from './util/m3u8-parser.util'
 
@@ -10,7 +11,7 @@ export class MasterM3u8 extends M3u8 {
    * @memberof MasterM3u8
    */
   constructor(content: string) {
-    super(content, M3u8Parser.parse(content))
+    super(content, M3u8Parser.parse(content, M3u8Type.MASTER))
   }
 
   /**

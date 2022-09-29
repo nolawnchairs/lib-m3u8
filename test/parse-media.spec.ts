@@ -4,6 +4,7 @@ import { M3u8Tag } from '../src/enums/m3u8-tag.enum'
 import { IM3u8Line } from '../src/interfaces/m3u8-line.interface'
 import { M3u8Parser } from '../src/util/m3u8-parser.util'
 import { MediaM3u8 } from '../src/media-m3u8.class'
+import { M3u8Type } from '../src/enums/m3u8-type.enum'
 
 const SPECIMEN = `
 #EXTM3U
@@ -42,7 +43,7 @@ describe('parsing a media m3u8 file', () => {
   let m3u8: MediaM3u8
 
   beforeEach(() => {
-    example = M3u8Parser.parse(SPECIMEN)
+    example = M3u8Parser.parse(SPECIMEN, M3u8Type.MEDIA)
     m3u8 = new MediaM3u8(SPECIMEN)
   })
 

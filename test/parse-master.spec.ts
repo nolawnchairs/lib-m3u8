@@ -3,6 +3,7 @@ import { M3u8LineType } from '../src/enums/m3u8-line-type.enum'
 import { IM3u8Line } from '../src/interfaces/m3u8-line.interface'
 import { M3u8Parser } from '../src/util/m3u8-parser.util'
 import { MasterM3u8 } from '../src/master-m3u8.class'
+import { M3u8Type } from '../src/enums/m3u8-type.enum'
 
 const SPECIMEN = `
 #EXTM3U
@@ -19,7 +20,7 @@ describe('Parsing a master.m3u8 file', () => {
   let m3u8: MasterM3u8
 
   beforeEach(() => {
-    example = M3u8Parser.parse(SPECIMEN)
+    example = M3u8Parser.parse(SPECIMEN, M3u8Type.MASTER)
     m3u8 = new MasterM3u8(SPECIMEN)
   })
 

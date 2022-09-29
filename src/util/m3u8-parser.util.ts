@@ -1,6 +1,7 @@
 
 import { M3u8LineType } from '../enums/m3u8-line-type.enum'
 import { M3u8Tag } from '../enums/m3u8-tag.enum'
+import { M3u8Type } from '../enums/m3u8-type.enum'
 import { IM3u8Line } from '../interfaces/m3u8-line.interface'
 
 export namespace M3u8Parser {
@@ -40,11 +41,27 @@ export namespace M3u8Parser {
    *
    * @export
    * @param {string} contents the UTF-8 encoded contents of the m3u8 file
+   * @param {M3u8Type} type the type of m3u8 file
    * @return {*}  {IM3u8Line[]}
    */
-  export function parse(contents: string): IM3u8Line[] {
+  export function parse(contents: string, type: M3u8Type): IM3u8Line[] {
 
     const lines = contents.split('\n').filter(line => line.trim().length > 0)
+
+    // Guard against attempting to parse a master playlist without the #EXT-X-STREAM-INF tag
+    if (type === M3u8Type.MASTER) {
+      if (!lines.some(line => line.startsWith(M3u8Tag.EXT_X_STREAM_INF))) {
+        throw new Error(`The provided content is not a master M3u8 playlist. (${M3u8Tag.EXT_X_STREAM_INF} tag not found)`)
+      }
+    }
+
+    // Guard against attempting to parse a media playlist without the #EXTINF tag
+    if (type === M3u8Type.MEDIA) {
+      if (!lines.some(line => line.startsWith(M3u8Tag.EXTINF))) {
+        throw new Error(`The provided content is not a media M3u8 playlist. (${M3u8Tag.EXTINF} tag not found)`)
+      }
+    }
+
     const m3u8Lines: IM3u8Line[] = []
     for (let i = 0; i < lines.length; i++) {
 

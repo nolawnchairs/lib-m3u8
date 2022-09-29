@@ -1,6 +1,7 @@
 
 import { M3u8LineType } from './enums/m3u8-line-type.enum'
 import { M3u8Tag } from './enums/m3u8-tag.enum'
+import { M3u8Type } from './enums/m3u8-type.enum'
 import { IM3u8Line } from './interfaces/m3u8-line.interface'
 import { IM3u8MediaSegment } from './interfaces/m3u8-media-segment.interface'
 import { M3u8 } from './m3u8.class'
@@ -18,7 +19,7 @@ export class MediaM3u8 extends M3u8 {
    * @memberof MediaM3u8
    */
   constructor(content: string) {
-    super(content, M3u8Parser.parse(content))
+    super(content, M3u8Parser.parse(content, M3u8Type.MEDIA))
 
     const segmentLines = this.lines.filter(line => [M3u8LineType.SEGMENT_META, M3u8LineType.SEGMENT_SRC].includes(line.type))
     const segmentSourceIndicies = segmentLines
