@@ -156,6 +156,14 @@ export declare class MediaM3u8 extends M3u8 {
 	 * @memberof MediaM3u8
 	 */
 	segmentCount(): number;
+	/**
+	 * Outputs the contents to an m3u8 slice
+	 *
+	 * @param {TargetResolver} resolver the url/path target resolver instance
+	 * @return {*}  {M3u8Slice}
+	 * @memberof MediaM3u8
+	 */
+	asSlice(resolver: TargetResolver): M3u8Slice;
 }
 export declare class TargetResolver {
 	readonly resolveEncryptionKeyUrl: Resolver;
@@ -166,6 +174,14 @@ export declare class TargetResolver {
 	 * @memberof TargetResolver
 	 */
 	constructor(resolveEncryptionKeyUrl: Resolver, resolveSourcePathUrl: Resolver);
+	/**
+	 * The default resolver that does not modify the original values
+	 *
+	 * @static
+	 * @return {*}  {TargetResolver}
+	 * @memberof TargetResolver
+	 */
+	static default(): TargetResolver;
 }
 /**
  * Enumeration that discriminates the type/purpose/scope of a line in an M3U8 file.
