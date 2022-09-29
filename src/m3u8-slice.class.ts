@@ -20,7 +20,7 @@ export class M3u8Slice implements IM3u8Producer {
     readonly segments: IM3u8MediaSegment[],
     readonly offsetMillis: number,
     readonly mediaExhausted: boolean,
-    readonly terminate: boolean
+    private readonly terminate: boolean
   ) { }
 
   /**
