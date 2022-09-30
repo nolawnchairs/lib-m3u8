@@ -1,6 +1,7 @@
 
 import { M3u8LineType } from './enums/m3u8-line-type.enum'
 import { M3u8Tag } from './enums/m3u8-tag.enum'
+import { IM3u8Line } from './interfaces/m3u8-line.interface'
 import { IM3u8MediaSegment } from './interfaces/m3u8-media-segment.interface'
 import { M3u8Slice } from './m3u8-slice.class'
 import { MediaM3u8 } from './media-m3u8.class'
@@ -114,7 +115,8 @@ export class M3u8Slicer {
     const mod = segmentIndex % 3
     const from = this.toLiveSlice(sequence, segmentIndex, 3 - mod)
     const to = next.toLiveSlice(sequence, segmentIndex + (mod ? 3 - mod : 0), mod)
-    from.appendDiscontinuity(to)
+    if (to.segments.length)
+      from.appendDiscontinuity(to)
     return from
   }
 
@@ -127,33 +129,41 @@ export class M3u8Slicer {
    * @memberof M3u8Slicer
    */
   private marshalSegments(segments: IM3u8MediaSegment[]): IM3u8MediaSegment[] {
-    return segments.map((segment, i) => {
-      const { meta, duration } = segment
-      if (i == 0 && !meta.find(line => line.tag === M3u8Tag.EXT_X_KEY)) {
-        meta.unshift(this.m3u8.findLineByTag(M3u8Tag.EXT_X_KEY))
+    const results: IM3u8MediaSegment[] = []
+    for (let i = 0; i < segments.length; i++) {
+      const segment = segments[i]
+      const meta: IM3u8Line[] = []
+
+      // Find the m3u8's #EXT-KEY line
+      const keyLine = this.m3u8.findLineByTag(M3u8Tag.EXT_X_KEY)
+
+      // If this is the first segment, and a key exists in its meta, then
+      // resolve the key URL and add it to the meta as the first element
+      if (i === 0 && keyLine) {
+        meta.push(
+          M3u8Builder.createSegmentMetaLine(
+            M3u8Tag.EXT_X_KEY,
+            this.resolver.resolveEncryptionKeyUrl(keyLine.value),
+          ),
+        )
       }
+
+      // For all segments, push the remaining meta elements without any key lines
+      meta.push(
+        ...segment.meta.filter(({ tag }) => tag !== M3u8Tag.EXT_X_KEY)
+      )
+
+      // Resolve the segment source URL
       const source = this.resolver.resolveSourcePathUrl(segment.source)
-      const index = meta.findIndex(m => m.tag === M3u8Tag.EXT_X_KEY)
-      if (~index) {
-        const { type, tag, value: oldValue } = meta[index]
-        const value = this.resolver.resolveEncryptionKeyUrl(oldValue)
-        const content = `${M3u8Tag.EXT_X_KEY}:${value}`
-        return {
-          duration,
-          source,
-          meta: [
-            ...meta.slice(0, index),
-            { type, tag, value, content },
-            ...meta.slice(index + 1),
-          ],
-        }
-      } else {
-        return {
-          duration,
-          source,
-          meta,
-        }
-      }
-    })
+
+      // Push the resolved segment to the results
+      results.push({
+        meta,
+        source,
+        duration: segment.duration,
+      })
+    }
+
+    return results
   }
 }
