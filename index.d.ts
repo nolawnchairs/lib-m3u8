@@ -86,6 +86,15 @@ export declare class M3u8Slicer {
 	 */
 	get length(): number;
 	/**
+	 * Composes one or more M3u8 slices into the first
+	 *
+	 * @static
+	 * @param {...M3u8Slice[]} slices the slices to compose
+	 * @return {*}  {M3u8Slice}
+	 * @memberof M3u8Slicer
+	 */
+	static compose(...slices: M3u8Slice[]): M3u8Slice;
+	/**
 	 * Slice the m3u8 subject into a new manifest for a live stream
 	 *
 	 * @param {number} sequence the value for the EXT-X-MEDIA-SEQUENCE tag
