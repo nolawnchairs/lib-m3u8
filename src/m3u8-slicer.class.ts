@@ -66,7 +66,7 @@ export class M3u8Slicer {
    * @return {*}  {M3u8Slice}
    * @memberof M3u8Slicer
    */
-  toLiveSlice(sequence: number, start: number, count: number, isDvr = false): M3u8Slice {
+  toLiveSlice(sequence: number, start: number, count: number, isDvr: boolean = false): M3u8Slice {
     const last = start + count
     const meta = [
       this.m3u8.findLineByTag(M3u8Tag.EXT_X_VERSION),
