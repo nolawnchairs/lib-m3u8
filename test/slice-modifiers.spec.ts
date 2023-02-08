@@ -44,6 +44,25 @@ describe('immutable slice modifiers', () => {
   const m3u8 = new MediaM3u8(SPECIMEN)
   const slicer = new M3u8Slicer(m3u8, resolver)
 
+  it('should insert meta tags', () => {
+    const slice = slicer.toVodSlice(0, m3u8.segmentCount())
+    const inserted1 = slice.insertMeta(M3u8Tag.EXT_X_BYTERANGE, '12345@0')
+    const inserted2 = slice.insertMeta(M3u8Tag.EXT_X_BYTERANGE, '12345@0', ({ tag }) => tag == M3u8Tag.EXT_X_MEDIA_SEQUENCE)
+    expect(inserted1.meta.find(line => line.tag === M3u8Tag.EXT_X_BYTERANGE)?.content).toBe('#EXT-X-BYTERANGE:12345@0')
+    expect(inserted2.meta.findIndex(line => line.tag === M3u8Tag.EXT_X_BYTERANGE)).toBe(4)
+    expect(inserted2.meta.findIndex(line => line.tag === M3u8Tag.EXT_X_MEDIA_SEQUENCE)).toBe(3)
+  })
+
+  it('should throw an error if meta tag already exists', () => {
+    const slice = slicer.toVodSlice(0, m3u8.segmentCount())
+    expect(() => slice.insertMeta(M3u8Tag.EXT_X_TARGETDURATION, '10')).toThrowError(/already exists/)
+  })
+
+  it('should throw and error if the predicate did not match any tags', () => {
+    const slice = slicer.toVodSlice(0, m3u8.segmentCount())
+    expect(() => slice.insertMeta(M3u8Tag.EXT_X_BYTERANGE, '12345@0', () => false)).toThrowError(/did not match/)
+  })
+
   it('should modify valid meta tags', () => {
     const slice = slicer.toVodSlice(0, m3u8.segmentCount())
     const modified = slice.modifyMeta(M3u8Tag.EXT_X_TARGETDURATION, () => '10')

@@ -5,6 +5,7 @@ import { IM3u8MediaSegment } from './interfaces/m3u8-media-segment.interface'
 import { IM3u8Producer } from './interfaces/m3u8-producer.interface'
 import { M3u8Builder } from './util/m3u8-builder.util'
 
+type Predicate = (line: IM3u8Line) => boolean
 type MetaModifier = (original: string) => string
 type SegmentModifier = (original: IM3u8MediaSegment, index: number) => IM3u8MediaSegment
 type SegmentMetaModifier = (original: IM3u8Line, segmentIndex: number, metaIndex: number) => string
@@ -37,6 +38,36 @@ export class M3u8Slice implements IM3u8Producer {
    */
   get offsetSeconds(): number {
     return Math.floor(this.offsetMillis / 1000)
+  }
+
+  /**
+   * Immutably creates a new slice with the specified metadata inserted
+   * after the first tag that matches the predicate, or at the end of
+   * the metadata if no predicate is provided
+   *
+   * @param {M3u8Tag} tag the tag to insert
+   * @param {string} value the value to insert
+   * @param {Predicate} [after] if supplied, the new meta content will be inserted after the first tag that matches the predicate
+   * @return {*}  {M3u8Slice}
+   * @throws {Error} if the specified tag already exists in the slice
+   * @throws {Error} if the predicate, when used, does not match any tags
+   * @memberof M3u8Slice
+   */
+  insertMeta(tag: M3u8Tag, value: string, after?: Predicate): M3u8Slice {
+    if (this.meta.some(line => line.tag === tag)) {
+      throw new Error(`Metadata tag ${tag} already exists`)
+    }
+    const clone = this.clone()
+    if (after) {
+      const index = clone.meta.findIndex(after)
+      if (!~index) {
+        throw new Error('Predicate did not match any tags')
+      }
+      clone.meta.splice(index + 1, 0, M3u8Builder.createMetaLine(tag, value))
+    } else {
+      clone.meta.push(M3u8Builder.createMetaLine(tag, value))
+    }
+    return clone
   }
 
   /**
