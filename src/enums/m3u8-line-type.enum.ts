@@ -38,4 +38,8 @@ export enum M3u8LineType {
    * Any line containing a tag that is not used by this library
    */
   UNUSED = 'UNUSED',
+  /**
+   * Any line containing a META tag that is specific to the Montage M3U8 spec
+   */
+  MONTAGE_META = 'MONTAGE_META',
 }

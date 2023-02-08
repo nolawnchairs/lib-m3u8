@@ -34,6 +34,7 @@ export namespace M3u8Parser {
     [M3u8Tag.EXT_X_SKIP_INF]: M3u8LineType.UNUSED,
     [M3u8Tag.EXT_X_MEDIA]: M3u8LineType.META,
     [M3u8Tag.EXTINF]: M3u8LineType.SEGMENT_META,
+    [M3u8Tag.EXT_X_MONTAGE_SOURCE_SEQUENCE]: M3u8LineType.MONTAGE_META,
   }
 
   /**

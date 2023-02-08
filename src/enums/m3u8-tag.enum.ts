@@ -36,4 +36,7 @@ export enum M3u8Tag {
   EXT_X_SKIP_INF = '#EXT-X-SKIP-INF',
   EXT_X_MEDIA = '#EXT-X-MEDIA',
   EXTINF = '#EXTINF',
+
+  // Montage-specific tags
+  EXT_X_MONTAGE_SOURCE_SEQUENCE = '#EXT-X-MONTAGE-SOURCE-SEQUENCE',
 }
