@@ -62,17 +62,21 @@ export class M3u8Slicer {
    * @param {number} sequence the value for the EXT-X-MEDIA-SEQUENCE tag
    * @param {number} start the index of the first segment to include in the slice
    * @param {number} count the number of segments to include in the slice
+   * @param {boolean} [isDvr=false] whether the slice is should include the "EVENT" value for the EXT-X-PLAYLIST-TYPE tag
    * @return {*}  {M3u8Slice}
    * @memberof M3u8Slicer
    */
-  toLiveSlice(sequence: number, start: number, count: number): M3u8Slice {
+  toLiveSlice(sequence: number, start: number, count: number, isDvr = false): M3u8Slice {
     const last = start + count
     const meta = [
       this.m3u8.findLineByTag(M3u8Tag.EXT_X_VERSION),
       this.m3u8.findLineByTag(M3u8Tag.EXT_X_TARGETDURATION),
-      M3u8Builder.createMetaLine(M3u8Tag.EXT_X_PLAYLIST_TYPE, 'EVENT'),
       M3u8Builder.createMetaLine(M3u8Tag.EXT_X_MEDIA_SEQUENCE, sequence.toString()),
     ]
+
+    if (isDvr) {
+      meta.push(M3u8Builder.createMetaLine(M3u8Tag.EXT_X_PLAYLIST_TYPE, 'EVENT'))
+    }
 
     const segments = this.marshalSegments(
       this.m3u8.segments.slice(start, last)

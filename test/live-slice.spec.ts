@@ -62,31 +62,37 @@ describe('parsing a live slice m3u8 file', () => {
     expect(lines[2]).toBe('#EXT-X-TARGETDURATION:6')
   })
 
-  it('should have the EXT_X_PLAYLIST_TYPE line', () => {
-    const slice = slicer.toLiveSlice(0, 0, 10).marshal()
+  it('should have the EXT_X_PLAYLIST_TYPE as EVENT line if DVR', () => {
+    const slice = slicer.toLiveSlice(0, 0, 10, true).marshal()
     const lines = slice.toString().split('\n')
-    expect(lines[3]).toBe('#EXT-X-PLAYLIST-TYPE:EVENT')
+    expect(lines[4]).toBe('#EXT-X-PLAYLIST-TYPE:EVENT')
+  })
+
+  it('should NOT have the EXT_X_PLAYLIST_TYPE line if not DVR', () => {
+    const slice = slicer.toLiveSlice(0, 0, 10, false).marshal()
+    const lines = slice.toString().split('\n')
+    expect(lines).not.toContain('#EXT-X-PLAYLIST-TYPE:EVENT')
   })
 
   it('should have the EXT_X_MEDIA_SEQUENCE line', () => {
     const slice = slicer.toLiveSlice(0, 0, 10).marshal()
     const lines = slice.toString().split('\n')
-    expect(lines[4]).toBe('#EXT-X-MEDIA-SEQUENCE:0')
+    expect(lines[3]).toBe('#EXT-X-MEDIA-SEQUENCE:0')
     const slice2 = slicer.toLiveSlice(1234, 0, 10).marshal()
     const lines2 = slice2.toString().split('\n')
-    expect(lines2[4]).toBe('#EXT-X-MEDIA-SEQUENCE:1234')
+    expect(lines2[3]).toBe('#EXT-X-MEDIA-SEQUENCE:1234')
   })
 
   it('should have the EXT_X_KEY line', () => {
     const slice = slicer.toLiveSlice(0, 0, 10).marshal()
     const lines = slice.toString().split('\n')
-    expect(lines[5]).toContain('URI="/keys/12345/encryption.key"')
+    expect(lines[4]).toContain('URI="/keys/12345/encryption.key"')
   })
 
   it('should have the EXT_X_KEY line when slicing from the middle', () => {
     const slice = slicer.toLiveSlice(0, 2, 3).marshal()
     const lines = slice.toString().split('\n')
-    expect(lines[5]).toContain('URI="/keys/12345/encryption.key"')
+    expect(lines[4]).toContain('URI="/keys/12345/encryption.key"')
   })
 
   it('should consist of 3 segments', () => {

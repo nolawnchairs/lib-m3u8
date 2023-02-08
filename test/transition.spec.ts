@@ -100,7 +100,7 @@ describe('transition slices', () => {
     expect(transition.segments[0].source).toEqual('from/0.ts')
     expect(transition.segments[1].source).toEqual('from/1.ts')
     expect(transition.segments[2].source).toEqual('from/2.ts')
-    expect(transition.marshal().split('\n').length).toBe(12)
+    expect(transition.marshal().split('\n').length).toBe(11)
   })
 
   it('should create a slice with the transition at the last segment', () => {
@@ -110,10 +110,10 @@ describe('transition slices', () => {
     expect(transition.segments[0].source).toEqual('from/1.ts')
     expect(transition.segments[1].source).toEqual('from/2.ts')
     expect(transition.segments[2].source).toEqual('to/3.ts')
-    expect(marshalled.length).toBe(14)
-    expect(marshalled[10]).toBe('#EXT-X-DISCONTINUITY')
-    expect(marshalled[11]).toContain('#EXT-X-KEY')
-    expect(marshalled[12]).toContain('#EXTINF')
+    expect(marshalled.length).toBe(13)
+    expect(marshalled[9]).toBe('#EXT-X-DISCONTINUITY')
+    expect(marshalled[10]).toContain('#EXT-X-KEY')
+    expect(marshalled[11]).toContain('#EXTINF')
   })
 
   it('should create a slice with the transition at the middle segment', () => {
@@ -123,10 +123,10 @@ describe('transition slices', () => {
     expect(transition.segments[0].source).toEqual('from/2.ts')
     expect(transition.segments[1].source).toEqual('to/3.ts')
     expect(transition.segments[2].source).toEqual('to/4.ts')
-    expect(marshalled.length).toBe(14)
-    expect(marshalled[8]).toBe('#EXT-X-DISCONTINUITY')
-    expect(marshalled[9]).toContain('#EXT-X-KEY')
-    expect(marshalled[10]).toContain('#EXTINF')
+    expect(marshalled.length).toBe(13)
+    expect(marshalled[7]).toBe('#EXT-X-DISCONTINUITY')
+    expect(marshalled[8]).toContain('#EXT-X-KEY')
+    expect(marshalled[9]).toContain('#EXTINF')
   })
 
   it('should cycle back to without transition', () => {
@@ -135,7 +135,7 @@ describe('transition slices', () => {
     expect(transition.segments[0].source).toEqual('from/3.ts')
     expect(transition.segments[1].source).toEqual('from/4.ts')
     expect(transition.segments[2].source).toEqual('from/5.ts')
-    expect(transition.marshal().split('\n').length).toBe(12)
+    expect(transition.marshal().split('\n').length).toBe(11)
   })
 
   it('should cycle back to a slice with the transition at the last segment', () => {
@@ -145,10 +145,10 @@ describe('transition slices', () => {
     expect(transition.segments[0].source).toEqual('from/4.ts')
     expect(transition.segments[1].source).toEqual('from/5.ts')
     expect(transition.segments[2].source).toEqual('to/6.ts')
-    expect(transition.marshal().split('\n').length).toBe(14)
-    expect(marshalled[10]).toBe('#EXT-X-DISCONTINUITY')
-    expect(marshalled[11]).toContain('#EXT-X-KEY')
-    expect(marshalled[12]).toContain('#EXTINF')
+    expect(transition.marshal().split('\n').length).toBe(13)
+    expect(marshalled[9]).toBe('#EXT-X-DISCONTINUITY')
+    expect(marshalled[10]).toContain('#EXT-X-KEY')
+    expect(marshalled[11]).toContain('#EXTINF')
   })
 
   it('should cycle back to a slice with the transition at the middle segment', () => {
@@ -158,9 +158,9 @@ describe('transition slices', () => {
     expect(transition.segments[0].source).toEqual('from/5.ts')
     expect(transition.segments[1].source).toEqual('to/6.ts')
     expect(transition.segments[2].source).toEqual('to/7.ts')
-    expect(transition.marshal().split('\n').length).toBe(14)
-    expect(marshalled[8]).toBe('#EXT-X-DISCONTINUITY')
-    expect(marshalled[9]).toContain('#EXT-X-KEY')
-    expect(marshalled[10]).toContain('#EXTINF')
+    expect(transition.marshal().split('\n').length).toBe(13)
+    expect(marshalled[7]).toBe('#EXT-X-DISCONTINUITY')
+    expect(marshalled[8]).toContain('#EXT-X-KEY')
+    expect(marshalled[9]).toContain('#EXTINF')
   })
 })
