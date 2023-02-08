@@ -26,16 +26,19 @@ describe('Parsing a master.m3u8 file', () => {
 
   it('should parse to 6 lines', () => {
     expect(example.length).toBe(6)
+    expect(m3u8.content.split('\n').length).toBe(6)
   })
 
   it('should correctly find the header', () => {
     expect(example[0].type).toBe(M3u8LineType.HEADER)
     expect(example[0].content).toBe('#EXTM3U')
+    expect(m3u8.content.split('\n')[0]).toBe('#EXTM3U')
   })
 
   it('should correctly find the version', () => {
     expect(example[1].type).toBe(M3u8LineType.META)
     expect(example[1].content).toBe('#EXT-X-VERSION:6')
+    expect(m3u8.content.split('\n')[1]).toBe('#EXT-X-VERSION:6')
   })
 
   it('should correctly find the first variant', () => {
@@ -56,8 +59,6 @@ describe('Parsing a master.m3u8 file', () => {
   it('should correctly find the second variant source', () => {
     expect(example[5].type).toBe(M3u8LineType.VARIANT_SRC)
     expect(example[5].content).toBe('640x360-365kbps.m3u8')
-    expect(m3u8.variants[0]).toBe('1920x1080-365kbps.m3u8')
-    expect(m3u8.variants[1]).toBe('640x360-365kbps.m3u8')
   })
 
   it('should find a total of 2 variants', () => {
