@@ -5,13 +5,13 @@ import { IM3u8Line } from './interfaces/m3u8-line.interface'
 
 export abstract class M3u8 {
 
+  abstract readonly content: string
+
   /**
-   * @param {string} content the m3u8-formatted string
    * @param {IM3u8Line[]} lines the parsed lines of the m3u8-formatted string
    * @memberof M3u8
    */
   constructor(
-    readonly content: string,
     readonly lines: IM3u8Line[]) { }
 
   /**

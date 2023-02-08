@@ -12,7 +12,7 @@ export class MasterM3u8 extends M3u8 {
    * @memberof MasterM3u8
    */
   constructor(content: string) {
-    super(content, M3u8Parser.parse(content, M3u8Type.MASTER))
+    super(M3u8Parser.parse(content, M3u8Type.MASTER))
   }
 
   /**
@@ -25,5 +25,9 @@ export class MasterM3u8 extends M3u8 {
     return this.lines
       .filter(({ type }) => type === M3u8LineType.VARIANT_SRC)
       .map(({ content }) => content)
+  }
+
+  get content(): string {
+    return this.lines.map(({ content }) => content).join('\n')
   }
 }

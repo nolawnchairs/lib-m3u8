@@ -23,7 +23,7 @@ export class MediaM3u8 extends M3u8 {
    * @memberof MediaM3u8
    */
   constructor(content: string) {
-    super(content, M3u8Parser.parse(content, M3u8Type.MEDIA))
+    super(M3u8Parser.parse(content, M3u8Type.MEDIA))
 
     const segmentLines = this.lines.filter(line => [M3u8LineType.SEGMENT_META, M3u8LineType.SEGMENT_SRC].includes(line.type))
     const segmentSourceIndicies = segmentLines
@@ -44,6 +44,10 @@ export class MediaM3u8 extends M3u8 {
       })
       lastIndex += metaLines.length + 1
     }
+  }
+
+  get content(): string {
+    return this.lines.map(({ content }) => content).join('\n')
   }
 
   /**
