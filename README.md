@@ -103,10 +103,15 @@ Properties:
 * **`mediaExhausted`** - `boolean` - Whether the slice was created at the end of a manifest file
 
 Methods:
-* **`marshal()`** - `() => string` - The method that converts the slice to an m3u8-formatted string
-* **`appendDiscontinuity()`** - `(nextSlice: M3u8Slice) => void` - appends another slice to this slice, adding an `#EXT-X-DISCONTINUITY` tag to the beginning of the appended slice.
+* **`marshal`** - The method that converts the slice to an m3u8-formatted string
+* **`appendDiscontinuity`** - appends another slice to this slice, adding an `#EXT-X-DISCONTINUITY` tag to the beginning of the appended slice.
+* **`modifyMeta`** - modifies the value to a specific meta tag from the manifest head
+* **`omitMeta`** - removes a specific meta tag from the manifest head
+* **`modifyEachSegment`** - apply a modifier function to each segment in the manifest
+* **`modifySegmentMeta`** - apply a modifier function to each segment's metadata
+* **`omitSegmentMeta`** - remove a specific tag from each segment's metadata
 
-> **Note**: appending a discontinuity will **mutate** the slice to which it's applied.
+> **Note**: appending a discontinuity will **mutate** the slice to which it's applied. The `modify` and `omit` methods will immutably create a new `M3u8Slice` instance.
 
 ```ts
 const slicer1 = new M3u8Slicer(firstM3u8)

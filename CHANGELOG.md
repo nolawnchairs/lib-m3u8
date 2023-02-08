@@ -1,4 +1,14 @@
-# 1.0.2 (Current)
+# 1.1.0 (Current)
+
+* Added `isDvr` argument to `M3u8Slicer#toLiveSlice` method that will append the 'EVENT' playlist type
+* Added immutable modifier methods to `M3u8Slice` class:
+  * `modifyMeta` - modifies the value to a specific meta tag from the manifest head
+  * `omitMeta` - removes a specific meta tag from the manifest head
+  * `modifyEachSegment` apply a modifier function to each segment in the manifest
+  * `modifySegmentMeta` - apply a modifier function to each segment's metadata
+  * `omitSegmentMeta` - remove a specific tag from each segment's metadata
+  
+# 1.0.2
 
 * Added static `compose` method to the `M3u8Slicer` class.
 * Improved segment marshaling algorithm
