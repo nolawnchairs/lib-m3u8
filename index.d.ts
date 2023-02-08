@@ -52,6 +52,20 @@ export declare class M3u8Slice implements IM3u8Producer {
 	 */
 	get offsetSeconds(): number;
 	/**
+	 * Immutably creates a new slice with the specified metadata inserted
+	 * after the first tag that matches the predicate, or at the end of
+	 * the metadata if no predicate is provided
+	 *
+	 * @param {M3u8Tag} tag the tag to insert
+	 * @param {string} value the value to insert
+	 * @param {Predicate} [after] if supplied, the new meta content will be inserted after the first tag that matches the predicate
+	 * @return {*}  {M3u8Slice}
+	 * @throws {Error} if the specified tag already exists in the slice
+	 * @throws {Error} if the predicate, when used, does not match any tags
+	 * @memberof M3u8Slice
+	 */
+	insertMeta(tag: M3u8Tag, value: string, after?: Predicate): M3u8Slice;
+	/**
 	 * Immutably creates a new slice with modified meta content
 	 *
 	 * @param {M3u8Tag} tag the tag to modify
@@ -287,7 +301,11 @@ export declare enum M3u8LineType {
 	/**
 	 * Any line containing a tag that is not used by this library
 	 */
-	UNUSED = "UNUSED"
+	UNUSED = "UNUSED",
+	/**
+	 * Any line containing a META tag that is specific to the Montage M3U8 spec
+	 */
+	MONTAGE_META = "MONTAGE_META"
 }
 /**
  * Enumeration that contains the possible tags that can be found in an M3U8 file.
@@ -325,9 +343,11 @@ export declare enum M3u8Tag {
 	EXT_X_SKIP = "#EXT-X-SKIP",
 	EXT_X_SKIP_INF = "#EXT-X-SKIP-INF",
 	EXT_X_MEDIA = "#EXT-X-MEDIA",
-	EXTINF = "#EXTINF"
+	EXTINF = "#EXTINF",
+	EXT_X_MONTAGE_SOURCE_SEQUENCE = "#EXT-X-MONTAGE-SOURCE-SEQUENCE"
 }
 export declare type MetaModifier = (original: string) => string;
+export declare type Predicate = (line: IM3u8Line) => boolean;
 export declare type Resolver = (originalValue: string) => string;
 export declare type SegmentMetaModifier = (original: IM3u8Line, segmentIndex: number, metaIndex: number) => string;
 export declare type SegmentModifier = (original: IM3u8MediaSegment, index: number) => IM3u8MediaSegment;
