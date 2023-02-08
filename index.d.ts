@@ -52,6 +52,55 @@ export declare class M3u8Slice implements IM3u8Producer {
 	 */
 	get offsetSeconds(): number;
 	/**
+	 * Immutably creates a new slice with modified meta content
+	 *
+	 * @param {M3u8Tag} tag the tag to modify
+	 * @param {MetaModifier} modifier the modifier function to apply
+	 * @return {*}  {M3u8Slice}
+	 * @throws {Error} if the tag is not found
+	 * @memberof M3u8Slice
+	 */
+	modifyMeta(tag: M3u8Tag, modifier: MetaModifier): M3u8Slice;
+	/**
+	 * Immutably creates a new slice with the specified tag removed
+	 *
+	 * @param {M3u8Tag} tag the tag to remove
+	 * @return {*}  {M3u8Slice}
+	 * @throws {Error} if the tag is not found
+	 * @memberof M3u8Slice
+	 */
+	omitMeta(tag: M3u8Tag): M3u8Slice;
+	/**
+	 * Immutably creates a new slice with modified segment content
+	 *
+	 * @param {SegmentModifier} modifier the modifier function to apply to each segment
+	 * @return {*}  {M3u8Slice}
+	 * @memberof M3u8Slice
+	 */
+	modifyEachSegment(modifier: SegmentModifier): M3u8Slice;
+	/**
+	 * Immutably creates a new slice with modified segment metadata. The
+	 * modifier function will be applied to each segment that contains
+	 * the specified meta tag
+	 *
+	 * @param {M3u8Tag} tag the tag to modify in each segment
+	 * @param {SegmentMetaModifier} modifier the modifier function to apply to each segment that contains the tag
+	 * @return {*}  {M3u8Slice}
+	 * @throws {Error} if the tag is not found at least once
+	 * @memberof M3u8Slice
+	 */
+	modifySegmentMeta(tag: M3u8Tag, modifier: SegmentMetaModifier): M3u8Slice;
+	/**
+	 * Immutably creates a new slice with the specified tag removed from
+	 * each segment's metadata
+	 *
+	 * @param {M3u8Tag} tag the tag to remove from each segment's metadata
+	 * @return {*}  {M3u8Slice}
+	 * @throws {Error} if the tag is not found at least once
+	 * @memberof M3u8Slice
+	 */
+	omitSegmentMeta(tag: M3u8Tag): M3u8Slice;
+	/**
 	 * Appends another slice to this slice, adding an EXT-X-DISCONTINUITY
 	 * tag to the first segment of the appended slice. This mutates the
 	 * current instance.
@@ -65,6 +114,13 @@ export declare class M3u8Slice implements IM3u8Producer {
 	 * @inheritdoc
 	 */
 	marshal(): string;
+	/**
+	 * Create a deep clone of this slice
+	 *
+	 * @return {*}  {M3u8Slice}
+	 * @memberof M3u8Slice
+	 */
+	clone(): M3u8Slice;
 }
 export declare class M3u8Slicer {
 	private readonly m3u8;
@@ -100,10 +156,11 @@ export declare class M3u8Slicer {
 	 * @param {number} sequence the value for the EXT-X-MEDIA-SEQUENCE tag
 	 * @param {number} start the index of the first segment to include in the slice
 	 * @param {number} count the number of segments to include in the slice
+	 * @param {boolean} [isDvr=false] whether the slice is should include the "EVENT" value for the EXT-X-PLAYLIST-TYPE tag
 	 * @return {*}  {M3u8Slice}
 	 * @memberof M3u8Slicer
 	 */
-	toLiveSlice(sequence: number, start: number, count: number): M3u8Slice;
+	toLiveSlice(sequence: number, start: number, count: number, isDvr?: boolean): M3u8Slice;
 	/**
 	 * Slice the m3u8 subject into a new manifest for a video-on-demand
 	 *
@@ -270,7 +327,10 @@ export declare enum M3u8Tag {
 	EXT_X_MEDIA = "#EXT-X-MEDIA",
 	EXTINF = "#EXTINF"
 }
+export declare type MetaModifier = (original: string) => string;
 export declare type Resolver = (originalValue: string) => string;
+export declare type SegmentMetaModifier = (original: IM3u8Line, segmentIndex: number, metaIndex: number) => string;
+export declare type SegmentModifier = (original: IM3u8MediaSegment, index: number) => IM3u8MediaSegment;
 /**
  * Represents a line in an M3U8 file.
  *
