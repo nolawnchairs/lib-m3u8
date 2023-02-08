@@ -1,4 +1,9 @@
-# 1.1.0 (Current)
+# 1.1.1 (Current)
+
+Added `insertMeta` method to the `M3u8Slice` class
+Added Montage-specific tags
+
+# 1.1.0
 
 * Added `isDvr` argument to `M3u8Slicer#toLiveSlice` method that will append the 'EVENT' playlist type
 * Added immutable modifier methods to `M3u8Slice` class:
