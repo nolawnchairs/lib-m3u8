@@ -66,7 +66,7 @@ describe('immutable slice modifiers', () => {
   it('should modify valid meta tags', () => {
     const slice = slicer.toVodSlice(0, m3u8.segmentCount())
     const modified = slice.modifyMeta(M3u8Tag.EXT_X_TARGETDURATION, () => '10')
-    expect(modified.meta.find(line => line.tag === M3u8Tag.EXT_X_TARGETDURATION)?.content).toBe('10')
+    expect(modified.meta.find(line => line.tag === M3u8Tag.EXT_X_TARGETDURATION)?.value).toBe('10')
   })
 
   it('should omit valid meta tags', () => {

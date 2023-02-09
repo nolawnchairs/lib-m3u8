@@ -85,10 +85,7 @@ export class M3u8Slice implements IM3u8Producer {
     if (!~index) {
       throw new Error(`Metadata tag ${tag} not found`)
     }
-    clone.meta[index] = {
-      ...clone.meta[index],
-      content: modifier(clone.meta[index].content),
-    }
+    clone.meta[index] = M3u8Builder.createMetaLine(tag, modifier(clone.meta[index].value))
     return clone
   }
 
