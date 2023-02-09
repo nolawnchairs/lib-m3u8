@@ -1,4 +1,8 @@
-# 1.2.0 (Current)
+# 1.2.1 (Current)
+
+* Fixed bug with `M3u8Slice#modifyMeta` method where `content` property was passed to modifier function instead of `value`
+
+# 1.2.0
 
 * Added `Manifest` class for Master m3u8 editing and marshaling
 * Added static `isMaster` and `isMedia` methods to the base `M3u8` class
