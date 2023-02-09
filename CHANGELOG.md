@@ -1,7 +1,13 @@
-# 1.1.1 (Current)
+# 1.2.0 (Current)
 
-Added `insertMeta` method to the `M3u8Slice` class
-Added Montage-specific tags
+* Added `Manifest` class for Master m3u8 editing and marshaling
+* Added static `isMaster` and `isMedia` methods to the base `M3u8` class
+
+---
+# 1.1.1
+
+* Added `insertMeta` method to the `M3u8Slice` class
+* Added Montage-specific tags
 
 # 1.1.0
 
