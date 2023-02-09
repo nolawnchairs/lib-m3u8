@@ -1,7 +1,7 @@
 src
 test
 *.js.map
-.gitignore
-.git
-ts*.json
 .eslintrc.js
+.git
+.gitignore
+tsconfig.*.json
