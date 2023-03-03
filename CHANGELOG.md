@@ -1,4 +1,8 @@
-# 1.2.1 (Current)
+# 1.2.2 (Current)
+
+* Added `M3u8Slicer#toClonedSlice` method that creates a cloned slice from a media m3u8 file
+
+# 1.2.1
 
 * Fixed bug with `M3u8Slice#modifyMeta` method where `content` property was passed to modifier function instead of `value`
 
