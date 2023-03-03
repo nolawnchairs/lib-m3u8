@@ -57,6 +57,22 @@ export class M3u8Slicer {
   }
 
   /**
+   * Slice the m3u8 subject into a cloned copy of itself
+   *
+   * @return {*}  {M3u8Slice}
+   * @memberof M3u8Slicer
+   */
+  toClonedSlice(): M3u8Slice {
+    return new M3u8Slice(
+      [...this.m3u8.meta],
+      [...this.m3u8.segments],
+      0,
+      true,
+      !!this.m3u8.findLineByTag(M3u8Tag.EXT_X_ENDLIST)
+    )
+  }
+
+  /**
    * Slice the m3u8 subject into a new manifest for a live stream
    *
    * @param {number} sequence the value for the EXT-X-MEDIA-SEQUENCE tag
