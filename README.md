@@ -91,6 +91,12 @@ const nextSlicer = new M3u8Slicer(otherM3u8, resolver)
 const transition = slice.toLiveTransitionSlice(0, 0, nextSlicer)
 ```
 
+The `M3u8Slicer` class can also be used to create a slice representation of the entire manifest with all properties left intact. The method takes no parameters.
+
+```ts
+const clone = slicer.toCloneSlice()
+```
+
 ### Slices
 
 The `M3u8Slice` objects include the following properties and methods:
@@ -129,6 +135,67 @@ const composite = slice1.marshal()
 ```
 
 > **Note**: Appending a discontinuity will work for both live and VOD slices.
+
+## Modifying slices
+
+The `M3u8Slice` class also includes methods that can be used to modify the slice's contents.
+
+### Inserting meta
+
+```ts
+const slice = slicer.toCloneSlice()
+const modified = slice.insertMeta(M3u8Tag.EXT_X_PROGRAM_DATE_TIME, new Date().toISOString())
+const marshaled = modified.marshal()
+```
+
+### Modifying meta
+
+```ts
+const slice = slicer.toCloneSlice()
+const modified = slice.modifyMeta(M3u8Tag.EXT_X_PROGRAM_DATE_TIME, new Date().toISOString())
+const marshaled = modified.marshal()
+```
+
+### Omitting meta
+
+```ts
+const slice = slicer.toCloneSlice()
+const modified = slice.omitMeta(M3u8Tag.EXT_X_PROGRAM_DATE_TIME)
+const marshaled = modified.marshal()
+```
+
+Since all slice modifier methods return a new `M3u8Slice` instance, they can be chained together.
+
+```ts
+const slice = slicer.toCloneSlice()
+  .insertMeta(M3u8Tag.EXT_X_PROGRAM_DATE_TIME, new Date().toISOString())
+  .modifyMeta(M3u8Tag.EXT_X_PROGRAM_DATE_TIME, new Date().toISOString())
+  .omitMeta(M3u8Tag.EXT_X_PROGRAM_DATE_TIME)
+```
+
+### Modifying each segment
+
+```ts
+const slice = slicer.toCloneSlice()
+  .modifyEachSegment(({ source, ...rest }) => ({
+    ...rest,
+    source: `https://example.com/${source}`
+  }))
+```
+
+### Modifying segment meta
+
+```ts
+const slice = slicer.toCloneSlice()
+const modified = slice.modifySegmentMeta(M3u8Tag.EXT_X_KEY,
+  ({ value }) => value.replace('encryption.key', 'https://example.com/keys/encryption.key'))
+```
+
+### Omitting segment meta
+
+```ts
+const slice = slicer.toCloneSlice().omitSegmentMeta(M3u8Tag.EXT_X_KEY)
+```
 
 ## Full Example
 
