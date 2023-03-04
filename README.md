@@ -138,7 +138,9 @@ const composite = slice1.marshal()
 
 ## Modifying slices
 
-The `M3u8Slice` class also includes methods that can be used to modify the slice's contents.
+The `M3u8Slice` class also includes methods that can be used to generate slices with modified metadata and segments.
+
+These methods all return a new `M3u8Slice` instance, and do not mutate the original slice.
 
 ### Inserting meta
 
