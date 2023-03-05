@@ -196,7 +196,16 @@ export declare class M3u8Slicer {
 	 */
 	static compose(...slices: M3u8Slice[]): M3u8Slice;
 	/**
-	 * Slice the m3u8 subject into a cloned copy of itself
+	 * Slice the copy of the m3u8 subject into a direct copy of itself
+	 * and apply the resolver each segment.
+	 *
+	 * @return {*}  {M3u8Slice}
+	 * @memberof M3u8Slicer
+	 */
+	toResolvedSlice(): M3u8Slice;
+	/**
+	 * Slice the m3u8 subject into a cloned copy of itself. This method
+	 * does **NOT** apply the resolver to the segments.
 	 *
 	 * @return {*}  {M3u8Slice}
 	 * @memberof M3u8Slicer
