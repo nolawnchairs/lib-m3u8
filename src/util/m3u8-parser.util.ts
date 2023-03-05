@@ -121,7 +121,16 @@ export namespace M3u8Parser {
   }
 
   function parseContentLine(line: string): Pick<IM3u8Line, 'tag' | 'value'> {
-    const [tag, value] = line.split(':') as [M3u8Tag, string]
+    const splitIndex = line.indexOf(':')
+    // If the line doesn't contain a colon, it's a tag with no value
+    if (splitIndex == -1) {
+      const tag = line as M3u8Tag
+      return { tag, value: undefined }
+    }
+
+    // Otherwise, split the line into a tag and value
+    const tag = line.substring(0, splitIndex) as M3u8Tag
+    const value = line.substring(splitIndex + 1)
     return { tag, value }
   }
 }

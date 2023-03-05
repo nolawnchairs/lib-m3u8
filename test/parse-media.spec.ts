@@ -14,7 +14,7 @@ const SPECIMEN = `
 #EXT-X-MEDIA-SEQUENCE:0
 #EXT-X-PLAYLIST-TYPE:VOD
 #EXT-X-INDEPENDENT-SEGMENTS
-#EXT-X-KEY:METHOD=AES-128,URI="encryption.key",IV=0xb7cb82dd5e12261c81eb13eba84e9ca3
+#EXT-X-KEY:METHOD=AES-128,URI="http://test.com/encryption.key",IV=0xb7cb82dd5e12261c81eb13eba84e9ca3
 #EXTINF:6.006000,
 960x540-2000kbps_f8a1ae2a59a2b2f7.ts
 #EXTINF:6.006000,
@@ -87,7 +87,7 @@ describe('parsing a media m3u8 file', () => {
 
   it('should find the key', () => {
     expect(example[6].type).toBe(M3u8LineType.SEGMENT_META)
-    expect(example[6].content).toBe('#EXT-X-KEY:METHOD=AES-128,URI="encryption.key",IV=0xb7cb82dd5e12261c81eb13eba84e9ca3')
+    expect(example[6].content).toBe('#EXT-X-KEY:METHOD=AES-128,URI="http://test.com/encryption.key",IV=0xb7cb82dd5e12261c81eb13eba84e9ca3')
   })
 
   it('should find 10 segments', () => {
