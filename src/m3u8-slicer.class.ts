@@ -57,7 +57,29 @@ export class M3u8Slicer {
   }
 
   /**
-   * Slice the m3u8 subject into a cloned copy of itself
+   * Slice the copy of the m3u8 subject into a direct copy of itself
+   * and apply the resolver each segment.
+   *
+   * @return {*}  {M3u8Slice}
+   * @memberof M3u8Slicer
+   */
+  toResolvedSlice(): M3u8Slice {
+    const meta = [...this.m3u8.meta]
+    const segments = this.marshalSegments(
+      this.m3u8.segments
+    )
+    return new M3u8Slice(
+      meta,
+      segments,
+      0,
+      false,
+      !!this.m3u8.findLineByTag(M3u8Tag.EXT_X_ENDLIST)
+    )
+  }
+
+  /**
+   * Slice the m3u8 subject into a cloned copy of itself. This method
+   * does **NOT** apply the resolver to the segments.
    *
    * @return {*}  {M3u8Slice}
    * @memberof M3u8Slicer
