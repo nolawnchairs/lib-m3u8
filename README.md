@@ -91,11 +91,20 @@ const nextSlicer = new M3u8Slicer(otherM3u8, resolver)
 const transition = slice.toLiveTransitionSlice(0, 0, nextSlicer)
 ```
 
+The `M3u8Slicer` class can create a slice representation of the entire manifest with the `TargetResolver` applied to all segments. The method takes no parameters.
+
+```ts
+const slicer = new M3u8Slicer(variantM3u8, resolver)
+const slice = slicer.toResolvedSlice()
+```
+
 The `M3u8Slicer` class can also be used to create a slice representation of the entire manifest with all properties left intact. The method takes no parameters.
 
 ```ts
 const clone = slicer.toCloneSlice()
 ```
+
+> Note this method will **NOT** run the `TargetResolver` on the slice.
 
 ### Slices
 

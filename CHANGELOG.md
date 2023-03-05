@@ -1,4 +1,8 @@
-# 1.2.3 (Current)
+# 1.2.4 (Current)
+
+* Added `M3u8Slicer#toResolvedSlice` method that creates a resolved slice from a media m3u8 file
+
+# 1.2.3
 
 * Fixed parsing bug where a colon `:` in meta values would cause premature termination of the value. Parsing now only splits on the first occurrence of a colon.
 
