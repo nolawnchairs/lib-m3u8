@@ -1,4 +1,8 @@
-# 1.2.2 (Current)
+# 1.2.3 (Current)
+
+* Fixed parsing bug where a colon `:` in meta values would cause premature termination of the value. Parsing now only splits on the first occurrence of a colon.
+
+# 1.2.2
 
 * Added `M3u8Slicer#toClonedSlice` method that creates a cloned slice from a media m3u8 file
 
