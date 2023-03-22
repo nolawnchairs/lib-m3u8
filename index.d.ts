@@ -63,12 +63,12 @@ export declare class M3u8Slice implements IM3u8Producer {
 	readonly segments: IM3u8MediaSegment[];
 	readonly offsetMillis: number;
 	readonly mediaExhausted: boolean;
-	private readonly terminate;
+	readonly terminate: boolean;
 	/**
 	 * @param {IM3u8Line[]} meta the metadata to include in the slice
 	 * @param {IM3u8MediaSegment[]} segments the media segments to include in the slice
 	 * @param {number} offsetMillis the offset in milliseconds from the beginning of the stream
-	 * @param {boolean} mediaExhausted whether the media has been exhausted
+	 * @param {boolean} mediaExhausted whether the media has been exhausted (used for live slices only)
 	 * @param {boolean} terminate whether to terminate the slice with an EXT-X-ENDLIST tag
 	 * @memberof M3u8Slice
 	 */

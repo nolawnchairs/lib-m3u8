@@ -1,4 +1,8 @@
-# 1.2.4 (Current)
+# 1.2.5 (Current)
+
+* Fixed bug where slicing would not properly find/resolve/include the `EXT-X-ENDLIST` tag
+
+# 1.2.4
 
 * Added `M3u8Slicer#toResolvedSlice` method that creates a resolved slice from a media m3u8 file
 
