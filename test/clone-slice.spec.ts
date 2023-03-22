@@ -20,6 +20,26 @@ http://example.com/12345/960x540-2000kbps_23222e7e8b6b1494.ts
 http://example.com/67890/960x540-2000kbps_457d5113a92ea5b6.ts
 #EXTINF:6.006000,
 http://example.com/67890/960x540-2000kbps_fd33e3f4aed0ae41.ts
+#EXT-X-ENDLIST
+`
+
+const SPECIMEN2 = `
+#EXTM3U
+#EXT-X-VERSION:6
+#EXT-X-TARGETDURATION:6
+#EXT-X-MEDIA-SEQUENCE:100
+#EXT-X-INDEPENDENT-SEGMENTS
+#EXT-X-KEY:METHOD=AES-128,URI="/keys/12345/encryption.key",IV=0xb7cb82dd5e12261c81eb13eba84e9ca3
+#EXTINF:6.006000,
+http://example.com/12345/960x540-2000kbps_f8a1ae2a59a2b2f7.ts
+#EXTINF:6.006000,
+http://example.com/12345/960x540-2000kbps_23222e7e8b6b1494.ts
+#EXT-X-DISCONTINUITY
+#EXT-X-KEY:METHOD=AES-128,URI="/keys/67890/encryption.key",IV=0xb7cb82dd5e12261c87461ea56e5f5da3
+#EXTINF:6.006000,
+http://example.com/67890/960x540-2000kbps_457d5113a92ea5b6.ts
+#EXTINF:6.006000,
+http://example.com/67890/960x540-2000kbps_fd33e3f4aed0ae41.ts
 `
 
 describe('clone slices', () => {
@@ -39,7 +59,15 @@ describe('clone slices', () => {
     expect(lines[3]).toBe('#EXT-X-MEDIA-SEQUENCE:100')
   })
 
-  it('should omit the #EXT-X-ENDLIST line', () => {
+  it('should retain the #EXT-X-ENDLIST line', () => {
+    const slice = slicer.toClonedSlice().marshal()
+    const lines = slice.toString().split('\n')
+    expect(lines[lines.length - 1]).toBe('#EXT-X-ENDLIST')
+  })
+
+  it('should not include the #EXT-X-ENDLIST if not present', () => {
+    const m3u8 = new MediaM3u8(SPECIMEN2)
+    const slicer = new M3u8Slicer(m3u8, resolver)
     const slice = slicer.toClonedSlice().marshal()
     const lines = slice.toString().split('\n')
     expect(lines[lines.length - 1]).not.toBe('#EXT-X-ENDLIST')
@@ -48,7 +76,7 @@ describe('clone slices', () => {
   it('should retain the proper segment count', () => {
     const slice = slicer.toClonedSlice().marshal()
     const lines = slice.toString().split('\n')
-    expect(lines.length).toBe(16)
+    expect(lines.length).toBe(17)
   })
 
   it('should retain all lines exactly as they were', () => {
@@ -77,5 +105,6 @@ describe('clone slices', () => {
     expect(lines[14]).toBe('http://example.com/67890/960x540-2000kbps_457d5113a92ea5b6.ts')
     expect(lines[15]).toBe('#EXTINF:6.006000,')
     expect(lines[16]).toBe('http://example.com/67890/960x540-2000kbps_fd33e3f4aed0ae41.ts')
+    expect(lines[17]).toBe('#EXT-X-ENDLIST')
   })
 })

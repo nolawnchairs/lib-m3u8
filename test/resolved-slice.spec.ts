@@ -1,3 +1,4 @@
+import { M3u8Tag } from '../src/enums/m3u8-tag.enum'
 import { M3u8Slicer } from '../src/m3u8-slicer.class'
 import { MediaM3u8 } from '../src/media-m3u8.class'
 import { TargetResolver } from '../src/util/target-resolver.util'
@@ -43,6 +44,14 @@ describe('resolved slices', () => {
     expect(segments[2].source).toEqual(
       'https://example.com/12345/960x540-2000kbps_457d5113a92ea5b6.ts'
     )
+  })
+
+  it('should retain the EXT-X-ENDLIST tag', () => {
+    const slice = slicer.toResolvedSlice()
+    expect(slice.terminate).toEqual(true)
+    const result = slice.marshal()
+    expect(result).toContain('#EXT-X-ENDLIST')
+    expect(result.split('\n').pop()).toEqual('#EXT-X-ENDLIST')
   })
 
   it('should retain each segment meta length', () => {

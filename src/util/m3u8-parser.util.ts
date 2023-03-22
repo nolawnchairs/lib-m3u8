@@ -109,7 +109,7 @@ export namespace M3u8Parser {
 
       // Detect the footer, should be the last
       if (line == M3u8Tag.EXT_X_ENDLIST && i == lines.length - 1) {
-        m3u8Lines.push({ type: M3u8LineType.FOOTER, content: line, value: line })
+        m3u8Lines.push({ type: M3u8LineType.FOOTER, content: line, value: line, tag: M3u8Tag.EXT_X_ENDLIST })
         continue
       }
 
