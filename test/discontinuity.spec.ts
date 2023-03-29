@@ -100,4 +100,14 @@ describe('appending discontinuity', () => {
     expect(m3u8.segments[m3u8.segments.length - 1].meta[1].content).toContain('0x44689f4810b2e9d22d8a28b4de4fe834')
     expect(m3u8.segments[m3u8.segments.length - 1].meta[1].content).toContain('/keys/67890/encryption.key')
   })
+
+  it('should append second media with discontinuity immutably', () => {
+    const slice1 = firstSlicer.toLiveSlice(0, 0, 3)
+    const slice2 = secondSlicer.toLiveSlice(0, 0, 1)
+    const slice3 = slice1.withDiscontinuity(slice2)
+    expect(slice1.segments.length).toBe(3)
+    expect(slice2.segments.length).toBe(1)
+    expect(slice3.segments.length).toBe(4)
+    expect(slice3).not.toBe(slice1)
+  })
 })
