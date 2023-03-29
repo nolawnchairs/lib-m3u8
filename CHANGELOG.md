@@ -1,4 +1,14 @@
-# 1.2.5 (Current)
+# 1.3.0 (Current)
+
+* Added the `M3u8Slice#withDiscontinuity` method, which immutably creates a new slice with the discontinuous slice
+added to it. This aims to replace the `M3u8Slice#appendDiscontinuity` method which mutates the original slice.
+* Deprecated the `M3u8Slice#appendDiscontinuity` method.
+* Made the `targetResolver` argument to the `M3u8Slicer` constructor optional. If not provided, the default
+`TargetResolver` will be used.
+* Deprecated the `M3u8Slicer#toLiveTransitionSlice` method, as it is too domain-specific to be included in the
+library. Consuming applications will eventaully need implement this functionality themselves.
+
+# 1.2.5
 
 * Fixed bug where slicing would not properly find/resolve/include the `EXT-X-ENDLIST` tag
 
