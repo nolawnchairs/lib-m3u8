@@ -66,16 +66,20 @@ export declare class M3u8Slice implements IM3u8Producer {
 	readonly terminate: boolean;
 	/**
 	 * @param {IM3u8Line[]} meta the metadata to include in the slice
-	 * @param {IM3u8MediaSegment[]} segments the media segments to include in the slice
-	 * @param {number} offsetMillis the offset in milliseconds from the beginning of the stream
-	 * @param {boolean} mediaExhausted whether the media has been exhausted (used for live slices only)
-	 * @param {boolean} terminate whether to terminate the slice with an EXT-X-ENDLIST tag
+	 * @param {IM3u8MediaSegment[]} segments the media segments to include in the
+	 * slice
+	 * @param {number} offsetMillis the offset in milliseconds from the beginning
+	 * of the stream
+	 * @param {boolean} mediaExhausted whether the media has been exhausted (used
+	 * for live slices only)
+	 * @param {boolean} terminate whether to terminate the slice with an
+	 * EXT-X-ENDLIST tag
 	 * @memberof M3u8Slice
 	 */
 	constructor(meta: IM3u8Line[], segments: IM3u8MediaSegment[], offsetMillis: number, mediaExhausted: boolean, terminate: boolean);
 	/**
-	 * Gets the total seconds offset from the beginning of the stream
-	 * that this slice represents
+	 * Gets the total seconds offset from the beginning of the stream that this
+	 * slice represents
 	 *
 	 * @readonly
 	 * @type {number}
@@ -83,13 +87,14 @@ export declare class M3u8Slice implements IM3u8Producer {
 	 */
 	get offsetSeconds(): number;
 	/**
-	 * Immutably creates a new slice with the specified metadata inserted
-	 * after the first tag that matches the predicate, or at the end of
-	 * the metadata if no predicate is provided
+	 * Immutably creates a new slice with the specified metadata inserted after
+	 * the first tag that matches the predicate, or at the end of the metadata if
+	 * no predicate is provided
 	 *
 	 * @param {M3u8Tag} tag the tag to insert
 	 * @param {string} value the value to insert
-	 * @param {Predicate} [after] if supplied, the new meta content will be inserted after the first tag that matches the predicate
+	 * @param {Predicate} [after] if supplied, the new meta content will be
+	 * inserted after the first tag that matches the predicate
 	 * @return {*}  {M3u8Slice}
 	 * @throws {Error} if the specified tag already exists in the slice
 	 * @throws {Error} if the predicate, when used, does not match any tags
@@ -118,26 +123,28 @@ export declare class M3u8Slice implements IM3u8Producer {
 	/**
 	 * Immutably creates a new slice with modified segment content
 	 *
-	 * @param {SegmentModifier} modifier the modifier function to apply to each segment
+	 * @param {SegmentModifier} modifier the modifier function to apply to each
+	 * segment
 	 * @return {*}  {M3u8Slice}
 	 * @memberof M3u8Slice
 	 */
 	modifyEachSegment(modifier: SegmentModifier): M3u8Slice;
 	/**
-	 * Immutably creates a new slice with modified segment metadata. The
-	 * modifier function will be applied to each segment that contains
-	 * the specified meta tag
+	 * Immutably creates a new slice with modified segment metadata. The modifier
+	 * function will be applied to each segment that contains the specified meta
+	 * tag
 	 *
 	 * @param {M3u8Tag} tag the tag to modify in each segment
-	 * @param {SegmentMetaModifier} modifier the modifier function to apply to each segment that contains the tag
+	 * @param {SegmentMetaModifier} modifier the modifier function to apply to
+	 * each segment that contains the tag
 	 * @return {*}  {M3u8Slice}
 	 * @throws {Error} if the tag is not found at least once
 	 * @memberof M3u8Slice
 	 */
 	modifySegmentMeta(tag: M3u8Tag, modifier: SegmentMetaModifier): M3u8Slice;
 	/**
-	 * Immutably creates a new slice with the specified tag removed from
-	 * each segment's metadata
+	 * Immutably creates a new slice with the specified tag removed from each
+	 * segment's metadata
 	 *
 	 * @param {M3u8Tag} tag the tag to remove from each segment's metadata
 	 * @return {*}  {M3u8Slice}
@@ -146,14 +153,28 @@ export declare class M3u8Slice implements IM3u8Producer {
 	 */
 	omitSegmentMeta(tag: M3u8Tag): M3u8Slice;
 	/**
-	 * Appends another slice to this slice, adding an EXT-X-DISCONTINUITY
-	 * tag to the first segment of the appended slice. This mutates the
-	 * current instance.
+	 * **Deprecation Warning** -  This method is deprecated, use
+	 * `withDiscontinuity` instead, which returns a new instance
+	 *
+	 * Appends another slice to this slice, adding an EXT-X-DISCONTINUITY tag to
+	 * the first segment of the appended slice. This mutates the current instance.
+	 *
+	 * @param {M3u8Slice} nextSlice the slice to append
+	 * @memberof M3u8Slice
+	 *
+	 * @deprecated this method mutates the current instance, use
+	 * `withDiscontinuity` instead, which returns a new instance of an M3u8Slice.
+	 * This method will be removed in the next major version.
+	 */
+	appendDiscontinuity(nextSlice: M3u8Slice): void;
+	/**
+	 * Appends another slice to this slice, adding an EXT-X-DISCONTINUITY tag to
+	 * the first segment of the appended slice, then returns the new slice.
 	 *
 	 * @param {M3u8Slice} nextSlice the slice to append
 	 * @memberof M3u8Slice
 	 */
-	appendDiscontinuity(nextSlice: M3u8Slice): void;
+	withDiscontinuity(nextSlice: M3u8Slice): M3u8Slice;
 	/**
 	 * @memberof M3u8Slice
 	 * @inheritdoc
@@ -173,11 +194,11 @@ export declare class M3u8Slicer {
 	private readonly targetDurationMillis;
 	/**
 	 * @param {MediaM3u8} m3u8 the M3u8 instance to slice
-	 * @param {TargetResolver} resolver the url/path target resolver instance
+	 * @param {TargetResolver} [resolver=TargetResolver.default()] the target resolver to use. Defaults to the default resolver.
 	 * @param {number} [speedRatio=1] the speed ratio to apply to segment durations (defaults to 1 = no change)
 	 * @memberof M3u8Slicer
 	 */
-	constructor(m3u8: MediaM3u8, resolver: TargetResolver, speedRatio?: number);
+	constructor(m3u8: MediaM3u8, resolver?: TargetResolver, speedRatio?: number);
 	/**
 	 * Get the segment count for the given m3u8 subject
 	 *
@@ -239,6 +260,8 @@ export declare class M3u8Slicer {
 	 * @param {M3u8Slicer} next the slicer instance to which the transition will be applied
 	 * @return {*}  {M3u8Slice}
 	 * @memberof M3u8Slicer
+	 *
+	 * @deprecated too-domain-specific, will be removed in next major version
 	 */
 	toLiveTransitionSlice(sequence: number, segmentIndex: number, next: M3u8Slicer): M3u8Slice;
 	/**
