@@ -167,6 +167,8 @@ export class M3u8Slicer {
    * @param {M3u8Slicer} next the slicer instance to which the transition will be applied
    * @return {*}  {M3u8Slice}
    * @memberof M3u8Slicer
+   *
+   * @deprecated too-domain-specific, will be removed in next major version
    */
   toLiveTransitionSlice(sequence: number, segmentIndex: number, next: M3u8Slicer): M3u8Slice {
     const mod = segmentIndex % 3
