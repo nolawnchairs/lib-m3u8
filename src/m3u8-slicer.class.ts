@@ -15,13 +15,13 @@ export class M3u8Slicer {
 
   /**
    * @param {MediaM3u8} m3u8 the M3u8 instance to slice
-   * @param {TargetResolver} resolver the url/path target resolver instance
+   * @param {TargetResolver} [resolver=TargetResolver.default()] the target resolver to use. Defaults to the default resolver.
    * @param {number} [speedRatio=1] the speed ratio to apply to segment durations (defaults to 1 = no change)
    * @memberof M3u8Slicer
    */
   constructor(
     private readonly m3u8: MediaM3u8,
-    private readonly resolver: TargetResolver,
+    private readonly resolver: TargetResolver = TargetResolver.default(),
     speedRatio: number = 1
   ) {
     const targetDurationLine = m3u8.findLineTypeByTag(M3u8LineType.META, M3u8Tag.EXT_X_TARGETDURATION)
