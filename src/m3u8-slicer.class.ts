@@ -147,16 +147,16 @@ export class M3u8Slicer {
     ]
 
     // Make slice
-    const slices = this.m3u8.segments.slice(start, last)
+    const slice = this.m3u8.segments.slice(start, last)
 
     // Insert key line into 0th segment's 0th meta line
     const keyLine = this.m3u8.findLineByTag(M3u8Tag.EXT_X_KEY)
     if (keyLine) {
-      slices[0].meta.unshift(keyLine)
+      slice[0].meta.unshift(keyLine)
     }
 
     // Marshal segments
-    const segments = this.marshalSegments(slices)
+    const segments = this.marshalSegments(slice)
 
     return new M3u8Slice(
       meta,
