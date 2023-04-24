@@ -153,18 +153,11 @@ export declare class M3u8Slice implements IM3u8Producer {
 	 */
 	omitSegmentMeta(tag: M3u8Tag): M3u8Slice;
 	/**
-	 * **Deprecation Warning** -  This method is deprecated, use
-	 * `withDiscontinuity` instead, which returns a new instance
-	 *
 	 * Appends another slice to this slice, adding an EXT-X-DISCONTINUITY tag to
 	 * the first segment of the appended slice. This mutates the current instance.
 	 *
 	 * @param {M3u8Slice} nextSlice the slice to append
 	 * @memberof M3u8Slice
-	 *
-	 * @deprecated this method mutates the current instance, use
-	 * `withDiscontinuity` instead, which returns a new instance of an M3u8Slice.
-	 * This method will be removed in the next major version.
 	 */
 	appendDiscontinuity(nextSlice: M3u8Slice): void;
 	/**
