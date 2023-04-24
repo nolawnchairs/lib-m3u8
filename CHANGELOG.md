@@ -1,4 +1,9 @@
-# 1.3.0 (Current)
+# 1.3.1 (Current)
+
+* Fixed bug where parsing/resolving playlists with multiple #EXT-X-KEY segment meta tags would omit all but the first tag
+* Undeprecated the `M3u8Slice#appendDiscontinuity` method.
+
+# 1.3.0
 
 * Added the `M3u8Slice#withDiscontinuity` method, which immutably creates a new slice with the discontinuous slice
 added to it. This aims to replace the `M3u8Slice#appendDiscontinuity` method which mutates the original slice.
