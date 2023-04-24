@@ -22,8 +22,7 @@ export class M3u8Slicer {
   constructor(
     private readonly m3u8: MediaM3u8,
     private readonly resolver: TargetResolver = TargetResolver.default(),
-    speedRatio: number = 1
-  ) {
+    speedRatio: number = 1) {
     const targetDurationLine = m3u8.findLineTypeByTag(M3u8LineType.META, M3u8Tag.EXT_X_TARGETDURATION)
     if (targetDurationLine) {
       this.targetDurationMillis = speedRatio * Strings.toInt(targetDurationLine.value, 6) * 1000
@@ -116,9 +115,19 @@ export class M3u8Slicer {
       meta.push(M3u8Builder.createMetaLine(M3u8Tag.EXT_X_PLAYLIST_TYPE, 'EVENT'))
     }
 
-    const segments = this.marshalSegments(
-      this.m3u8.segments.slice(start, last)
-    )
+    // Find encryption key line in original manifest
+    const keyLine = this.m3u8.findLineByTag(M3u8Tag.EXT_X_KEY)
+
+    // Make slice
+    const slice = this.m3u8.segments.slice(start, last)
+
+    // Insert key line into 0th segment's 0th meta line if it doesn't exist
+    if (keyLine && slice.length && !slice[0].meta.some(line => line.tag === M3u8Tag.EXT_X_KEY)) {
+      slice[0].meta.unshift(keyLine)
+    }
+
+    // Marshal segments
+    const segments = this.marshalSegments(slice)
 
     return new M3u8Slice(
       meta,
@@ -146,12 +155,14 @@ export class M3u8Slicer {
       M3u8Builder.createMetaLine(M3u8Tag.EXT_X_MEDIA_SEQUENCE, '0'),
     ]
 
+    // Find encryption key line in original manifest
+    const keyLine = this.m3u8.findLineByTag(M3u8Tag.EXT_X_KEY)
+
     // Make slice
     const slice = this.m3u8.segments.slice(start, last)
 
-    // Insert key line into 0th segment's 0th meta line
-    const keyLine = this.m3u8.findLineByTag(M3u8Tag.EXT_X_KEY)
-    if (keyLine) {
+    // Insert key line into 0th segment's 0th meta line if it doesn't exist
+    if (keyLine && slice.length && !slice[0].meta.some(line => line.tag === M3u8Tag.EXT_X_KEY)) {
       slice[0].meta.unshift(keyLine)
     }
 
