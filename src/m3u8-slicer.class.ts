@@ -193,24 +193,19 @@ export class M3u8Slicer {
       const segment = segments[i]
       const meta: IM3u8Line[] = []
 
-      // Find the m3u8's #EXT-KEY line
-      const keyLine = this.m3u8.findLineByTag(M3u8Tag.EXT_X_KEY)
-
-      // If this is the first segment, and a key exists in its meta, then
-      // resolve the key URL and add it to the meta as the first element
-      if (i === 0 && keyLine) {
-        meta.push(
-          M3u8Builder.createSegmentMetaLine(
-            M3u8Tag.EXT_X_KEY,
-            this.resolver.resolveEncryptionKeyUrl(keyLine.value),
-          ),
-        )
+      // Copy meta, resolving the encryption key URL
+      for (const m of segment.meta) {
+        if (m.tag === M3u8Tag.EXT_X_KEY) {
+          meta.push(
+            M3u8Builder.createSegmentMetaLine(
+              M3u8Tag.EXT_X_KEY,
+              this.resolver.resolveEncryptionKeyUrl(m.value),
+            ),
+          )
+        } else {
+          meta.push(m)
+        }
       }
-
-      // For all segments, push the remaining meta elements without any key lines
-      meta.push(
-        ...segment.meta.filter(({ tag }) => tag !== M3u8Tag.EXT_X_KEY)
-      )
 
       // Resolve the segment source URL
       const source = this.resolver.resolveSourcePathUrl(segment.source)
