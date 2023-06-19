@@ -119,7 +119,7 @@ export class M3u8Slicer {
     const keyLine = this.m3u8.findLineByTag(M3u8Tag.EXT_X_KEY)
 
     // Make slice
-    const slice = this.m3u8.segments.slice(start, last)
+    const slice = count ? this.m3u8.segments.slice(start, last) : []
 
     // Insert key line into 0th segment's 0th meta line if it doesn't exist
     if (keyLine && slice.length && !slice[0].meta.some(line => line.tag === M3u8Tag.EXT_X_KEY)) {
