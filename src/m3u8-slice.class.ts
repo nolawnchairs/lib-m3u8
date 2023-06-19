@@ -188,12 +188,17 @@ export class M3u8Slice implements IM3u8Producer {
    * @memberof M3u8Slice
    */
   appendDiscontinuity(nextSlice: M3u8Slice) {
+    if (!nextSlice.segments.length) {
+      return
+    }
     const [first, ...rest] = nextSlice.segments
     if (first) {
-      const appended = [M3u8Builder.createSegmentMetaLine(M3u8Tag.EXT_X_DISCONTINUITY, ''), ...first.meta]
       this.segments.push({
         ...first,
-        meta: appended,
+        meta: [
+          M3u8Builder.createSegmentMetaLine(M3u8Tag.EXT_X_DISCONTINUITY, ''),
+          ...first.meta,
+        ],
       })
       if (rest.length) {
         this.segments.push(...rest)
@@ -209,13 +214,18 @@ export class M3u8Slice implements IM3u8Producer {
    * @memberof M3u8Slice
    */
   withDiscontinuity(nextSlice: M3u8Slice): M3u8Slice {
+    if (!nextSlice.segments.length) {
+      return this
+    }
     const [first, ...rest] = nextSlice.segments
     const clone = this.clone()
     if (first) {
-      const appended = [M3u8Builder.createSegmentMetaLine(M3u8Tag.EXT_X_DISCONTINUITY, ''), ...first.meta]
       clone.segments.push({
         ...first,
-        meta: appended,
+        meta: [
+          M3u8Builder.createSegmentMetaLine(M3u8Tag.EXT_X_DISCONTINUITY, ''),
+          ...first.meta,
+        ],
       })
       if (rest.length) {
         clone.segments.push(...rest)

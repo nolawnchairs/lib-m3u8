@@ -135,4 +135,11 @@ describe('parsing a live slice m3u8 file', () => {
     expect(slice.segments[2].source).toBe('https://example.com/12345/960x540-2000kbps_211f1e36f293d1b6.ts')
     expect(slice.segments[3]).toBeUndefined()
   })
+
+  it('should just include meta if zero segments', () => {
+    const slice = slicer.toLiveSlice(0, 0, 0)
+    expect(slice.segments.length).toBe(0)
+    expect(slice.meta.length).toBe(3)
+    expect(slice.marshal().split('\n').length).toBe(4)
+  })
 })

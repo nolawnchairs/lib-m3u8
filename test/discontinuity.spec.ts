@@ -121,4 +121,40 @@ describe('appending discontinuity', () => {
     expect(m3u8.segments[3].meta[1].content).toContain('0x44689f4810b2e9d22d8a28b4de4fe834')
     expect(m3u8.segments[3].meta[1].content).toContain('/keys/67890/encryption.key')
   })
+
+  it('should append discontinuity to empty slice', () => {
+    const slice1 = firstSlicer.toLiveSlice(0, 0, 0)
+    const slice2 = secondSlicer.toLiveSlice(0, 0, 1)
+    expect(slice1.segments.length).toBe(0)
+    expect(slice2.segments.length).toBe(1)
+    const slice3 = slice1.withDiscontinuity(slice2)
+  })
+
+  it('should only contain one EXT-X-DISCONTINUITY tag per slice added', () => {
+    const slice1 = firstSlicer.toLiveSlice(0, 0, 1)
+    const slice2 = secondSlicer.toLiveSlice(0, 0, 1)
+    const slice3 = firstSlicer.toLiveSlice(0, 1, 1)
+    const slice4 = secondSlicer.toLiveSlice(0, 1, 1)
+    const finished = slice1
+      .withDiscontinuity(slice2)
+      .withDiscontinuity(slice3)
+      .withDiscontinuity(slice4)
+    expect(finished.segments.length).toBe(4)
+    expect(finished.segments.filter(s => s.meta.some(m => m.content === '#EXT-X-DISCONTINUITY')).length).toBe(3)
+    expect(finished.marshal().split('\n').filter(l => l === '#EXT-X-DISCONTINUITY').length).toBe(3)
+  })
+
+  it('should only contain one EXT-X-DISCONTINUITY tag per slice with > 0 segmetns', () => {
+    const slice1 = firstSlicer.toLiveSlice(0, 0, 0)
+    const slice2 = secondSlicer.toLiveSlice(0, 1, 1)
+    const slice3 = firstSlicer.toLiveSlice(0, 0, 0)
+    const slice4 = secondSlicer.toLiveSlice(0, 1, 1)
+    const finished = slice1
+      .withDiscontinuity(slice2)
+      .withDiscontinuity(slice3)
+      .withDiscontinuity(slice4)
+    expect(finished.segments.length).toBe(2)
+    expect(finished.segments.filter(s => s.meta.some(m => m.content === '#EXT-X-DISCONTINUITY')).length).toBe(2)
+    expect(finished.marshal().split('\n').filter(l => l === '#EXT-X-DISCONTINUITY').length).toBe(2)
+  })
 })
