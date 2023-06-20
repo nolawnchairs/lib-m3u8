@@ -37,6 +37,10 @@ export namespace M3u8Parser {
     [M3u8Tag.EXT_X_MONTAGE_SOURCE_SEQUENCE]: M3u8LineType.MONTAGE_META,
   }
 
+  const META_TAGS = Object.keys(TAGS_BY_TYPE).filter(key => TAGS_BY_TYPE[key] == M3u8LineType.META)
+  const SEGMENT_META_TAGS = Object.keys(TAGS_BY_TYPE).filter(key => TAGS_BY_TYPE[key] == M3u8LineType.SEGMENT_META)
+  const VARIANT_META_TAGS = Object.keys(TAGS_BY_TYPE).filter(key => TAGS_BY_TYPE[key] == M3u8LineType.VARIANT_META)
+
   /**
    * Parse the contents of an m3u8-formatted string into an array of m3u8 lines.
    *
@@ -75,22 +79,19 @@ export namespace M3u8Parser {
       }
 
       // Detect if a line is a meta tag
-      const metaTags = Object.keys(TAGS_BY_TYPE).filter(key => TAGS_BY_TYPE[key] == M3u8LineType.META)
-      if (~metaTags.findIndex(tag => line.startsWith(tag))) {
+      if (~META_TAGS.findIndex(tag => line.startsWith(tag))) {
         m3u8Lines.push({ type: M3u8LineType.META, content: line, ...parseContentLine(line) })
         continue
       }
 
       // Detect if a line is a segment meta tag
-      const segmentMetaTags = Object.keys(TAGS_BY_TYPE).filter(key => TAGS_BY_TYPE[key] == M3u8LineType.SEGMENT_META)
-      if (~segmentMetaTags.findIndex(tag => line.startsWith(tag))) {
+      if (~SEGMENT_META_TAGS.findIndex(tag => line.startsWith(tag))) {
         m3u8Lines.push({ type: M3u8LineType.SEGMENT_META, content: line, ...parseContentLine(line) })
         continue
       }
 
       // Detect if a line is a variant meta tag
-      const variantMetaTags = Object.keys(TAGS_BY_TYPE).filter(key => TAGS_BY_TYPE[key] == M3u8LineType.VARIANT_META)
-      if (~variantMetaTags.findIndex(tag => line.startsWith(tag))) {
+      if (~VARIANT_META_TAGS.findIndex(tag => line.startsWith(tag))) {
         m3u8Lines.push({ type: M3u8LineType.VARIANT_META, content: line, ...parseContentLine(line) })
         continue
       }
