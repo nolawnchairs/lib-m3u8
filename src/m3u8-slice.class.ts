@@ -4,6 +4,7 @@ import { IM3u8Line } from './interfaces/m3u8-line.interface'
 import { IM3u8MediaSegment } from './interfaces/m3u8-media-segment.interface'
 import { IM3u8Producer } from './interfaces/m3u8-producer.interface'
 import { M3u8Builder } from './util/m3u8-builder.util'
+import { M3u8Parser } from './util/m3u8-parser.util'
 
 type Predicate = (line: IM3u8Line) => boolean
 type MetaModifier = (original: string) => string
@@ -241,8 +242,8 @@ export class M3u8Slice implements IM3u8Producer {
   marshal(): string {
     return [
       M3u8Tag.EXT_M3U,
-      ...this.meta.map(({ content }) => content),
-      ...this.segments.map(({ meta, source }) => [...meta.map(({ content }) => content), source].join('\n')),
+      ...M3u8Parser.uniqueLineByTag(this.meta).map(({ content }) => content),
+      ...this.segments.map(({ meta, source }) => [...M3u8Parser.uniqueLineByTag(meta).map(({ content }) => content), source].join('\n')),
       this.terminate ? M3u8Tag.EXT_X_ENDLIST : '',
     ].join('\n').trim()
   }

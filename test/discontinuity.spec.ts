@@ -3,6 +3,7 @@ import { MediaM3u8 } from '../src/media-m3u8.class'
 import { M3u8Slicer } from '../src/m3u8-slicer.class'
 import { TargetResolver } from '../src/util/target-resolver.util'
 import { M3u8Tag } from '../src/enums/m3u8-tag.enum'
+import { inspect } from 'util'
 
 const SPECIMEN_1 = `
 #EXTM3U
@@ -49,6 +50,7 @@ const SPECIMEN_2 = `
 #EXTINF:3.272633,
 960x540-2000kbps_432c8db34db87ca5.ts
 `
+
 describe('appending discontinuity', () => {
 
   const first = new MediaM3u8(SPECIMEN_1)
@@ -156,5 +158,15 @@ describe('appending discontinuity', () => {
     expect(finished.segments.length).toBe(2)
     expect(finished.segments.filter(s => s.meta.some(m => m.content === '#EXT-X-DISCONTINUITY')).length).toBe(2)
     expect(finished.marshal().split('\n').filter(l => l === '#EXT-X-DISCONTINUITY').length).toBe(2)
+  })
+
+  it('should remove duplicate discontinuity tags during marshaling', () => {
+    const slice1 = firstSlicer.toLiveSlice(0, 0, 2)
+    const slice2 = secondSlicer.toLiveSlice(0, 0, 2)
+    const combined = slice1.withDiscontinuity(slice2)
+    const toDuplicate = combined.segments[2].meta[0]
+    combined.segments[2].meta.unshift(toDuplicate)
+    const marshaled = combined.marshal()
+    expect(marshaled.split('\n').filter(l => l === '#EXT-X-DISCONTINUITY').length).toBe(1)
   })
 })
