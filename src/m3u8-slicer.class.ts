@@ -6,6 +6,7 @@ import { IM3u8MediaSegment } from './interfaces/m3u8-media-segment.interface'
 import { M3u8Slice } from './m3u8-slice.class'
 import { MediaM3u8 } from './media-m3u8.class'
 import { M3u8Builder } from './util/m3u8-builder.util'
+import { M3u8Parser } from './util/m3u8-parser.util'
 import { Strings } from './util/string.util'
 import { TargetResolver } from './util/target-resolver.util'
 
@@ -231,7 +232,7 @@ export class M3u8Slicer {
 
       // Push the resolved segment to the results
       results.push({
-        meta,
+        meta: M3u8Parser.uniqueLineByTag(meta),
         source,
         duration: segment.duration,
       })

@@ -35,11 +35,12 @@ export class MediaM3u8 extends M3u8 {
     let lastIndex = 0
 
     while (this.segments.length < segmentSourceIndicies.length) {
-      const metaLines = segmentLines.slice(lastIndex, segmentSourceIndicies[this.segments.length])
+      const segmentSourceIndex = segmentSourceIndicies[this.segments.length]
+      const metaLines = segmentLines.slice(lastIndex, segmentSourceIndex)
       const duration = metaLines.find(line => line.content.startsWith(M3u8Tag.EXTINF))?.content.split(':')[1]
       this.segments.push({
-        meta: metaLines,
-        source: segmentLines[segmentSourceIndicies[this.segments.length]].content,
+        meta: M3u8Parser.uniqueLineByTag(metaLines),
+        source: segmentLines[segmentSourceIndex].content,
         duration: Strings.toFloat(duration, 6),
       })
       lastIndex += metaLines.length + 1
@@ -63,11 +64,11 @@ export class MediaM3u8 extends M3u8 {
   /**
    * Outputs the contents to an m3u8 slice
    *
-   * @param {TargetResolver} resolver the url/path target resolver instance
+   * @param {TargetResolver} [resolver] optional url/path target resolver instance
    * @return {*}  {M3u8Slice}
    * @memberof MediaM3u8
    */
-  asSlice(resolver: TargetResolver): M3u8Slice {
+  asSlice(resolver?: TargetResolver): M3u8Slice {
     return new M3u8Slicer(this, resolver)
       .toVodSlice(0, this.segmentCount())
   }
