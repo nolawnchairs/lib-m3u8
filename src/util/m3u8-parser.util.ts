@@ -134,4 +134,22 @@ export namespace M3u8Parser {
     const value = line.substring(splitIndex + 1)
     return { tag, value }
   }
+
+  /**
+   * Remove duplicate lines from an array of m3u8 lines, keeping the first encountered.
+   *
+   * @export
+   * @param {IM3u8Line[]} lines the lines to deduplicate
+   * @return {*}  {IM3u8Line[]}
+   */
+  export function uniqueLineByTag(lines: IM3u8Line[]): IM3u8Line[] {
+    const seen = []
+    return lines.filter(line => {
+      if (seen.includes(line.tag)) {
+        return false
+      }
+      seen.push(line.tag)
+      return true
+    })
+  }
 }
