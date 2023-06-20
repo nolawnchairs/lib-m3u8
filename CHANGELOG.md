@@ -1,4 +1,9 @@
-# 1.3.1 (Current)
+# 1.3.2 (Current)
+
+ * Ensure segment meta tags are unique per segment
+ * Small performance improvements
+
+# 1.3.1
 
 * Fixed bug where parsing/resolving playlists with multiple #EXT-X-KEY segment meta tags would omit all but the first tag
 * Undeprecated the `M3u8Slice#appendDiscontinuity` method.

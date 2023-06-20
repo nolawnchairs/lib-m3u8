@@ -337,11 +337,11 @@ export declare class MediaM3u8 extends M3u8 {
 	/**
 	 * Outputs the contents to an m3u8 slice
 	 *
-	 * @param {TargetResolver} resolver the url/path target resolver instance
+	 * @param {TargetResolver} [resolver] optional url/path target resolver instance
 	 * @return {*}  {M3u8Slice}
 	 * @memberof MediaM3u8
 	 */
-	asSlice(resolver: TargetResolver): M3u8Slice;
+	asSlice(resolver?: TargetResolver): M3u8Slice;
 }
 export declare class TargetResolver {
 	readonly resolveEncryptionKeyUrl: Resolver;
