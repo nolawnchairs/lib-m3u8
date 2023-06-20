@@ -197,7 +197,7 @@ export class M3u8Slice implements IM3u8Producer {
         ...first,
         meta: [
           M3u8Builder.createSegmentMetaLine(M3u8Tag.EXT_X_DISCONTINUITY, ''),
-          ...first.meta,
+          ...first.meta.filter(line => line.tag !== M3u8Tag.EXT_X_DISCONTINUITY),
         ],
       })
       if (rest.length) {
@@ -224,7 +224,7 @@ export class M3u8Slice implements IM3u8Producer {
         ...first,
         meta: [
           M3u8Builder.createSegmentMetaLine(M3u8Tag.EXT_X_DISCONTINUITY, ''),
-          ...first.meta,
+          ...first.meta.filter(line => line.tag !== M3u8Tag.EXT_X_DISCONTINUITY),
         ],
       })
       if (rest.length) {
