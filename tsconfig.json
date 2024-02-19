@@ -16,6 +16,7 @@
       "noUnusedLocals": false,
       "strictPropertyInitialization": false,
       "removeComments": true,
+      "declaration": true,
       "outDir": "./lib"
     },
     "include": [

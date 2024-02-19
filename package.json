@@ -2,7 +2,7 @@
   "name": "@knightinteractive/m3u8",
   "version": "1.3.2",
   "description": "Library for parsing, manipulating and producing ad-hoc m3u8 files for HLS",
-  "main": "index.js",
+  "main": "lib/index.js",
   "author": "Mike <nolawnchairs@gmail.com>",
   "homepage": "https://bitbucket.org/knightinteractive/lib-m3u8",
   "repository": {
@@ -30,21 +30,19 @@
     "@types/jest": "^27.0.3",
     "@typescript-eslint/eslint-plugin": "^4.28.2",
     "@typescript-eslint/parser": "^4.28.2",
-    "dts-bundle-generator": "^5.9.0",
     "eslint": "^7.30.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "prettier": "^2.3.2",
     "jest": "^27.4.3",
+    "prettier": "^2.3.2",
     "ts-jest": "^27.1.1",
     "typescript": "^4.5.2"
   },
   "scripts": {
     "test": "jest",
-    "prebuild": "rm -rf ./lib",
+    "clean": "rm -rf ./lib",
     "test-runner": "jest --watchAll",
-    "define": "dts-bundle-generator --config ./dts-config.json",
-    "build": "npm run prebuild && tsc && npm run define",
-    "prepublish": "npm run build && npm test"
+    "build": "npm run clean && tsc",
+    "prepublish": "npm test"
   }
 }
