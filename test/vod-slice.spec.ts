@@ -1,8 +1,8 @@
 
-import { MediaM3u8 } from '../src/media-m3u8.class'
-import { M3u8Slicer } from '../src/m3u8-slicer.class'
-import { TargetResolver } from '../src/util/target-resolver.util'
 import { M3u8Tag } from '../src/enums/m3u8-tag.enum'
+import { M3u8Slicer } from '../src/m3u8-slicer.class'
+import { MediaM3u8 } from '../src/media-m3u8.class'
+import { TargetResolver } from '../src/util/target-resolver.util'
 
 const SPECIMEN = `
 #EXTM3U
@@ -38,8 +38,8 @@ const SPECIMEN = `
 describe('parsing a live slice to a vod slice', () => {
 
   const resolver = new TargetResolver(
-    value => value.replace('encryption.key', '/keys/12345/encryption.key'),
-    value => `https://example.com/12345/${value}`
+    (value) => value.replace('encryption.key', '/keys/12345/encryption.key'),
+    (value) => `https://example.com/12345/${value}`
   )
   const m3u8 = new MediaM3u8(SPECIMEN)
   const slicer = new M3u8Slicer(m3u8, resolver)

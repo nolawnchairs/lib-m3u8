@@ -1,8 +1,7 @@
 
-import { MediaM3u8 } from '../src/media-m3u8.class'
 import { M3u8Slicer } from '../src/m3u8-slicer.class'
+import { MediaM3u8 } from '../src/media-m3u8.class'
 import { TargetResolver } from '../src/util/target-resolver.util'
-import { M3u8Tag } from '../src/enums/m3u8-tag.enum'
 
 const SPECIMEN = `
 #EXTM3U
@@ -39,8 +38,8 @@ describe('m3u8 manifest exhaustion', () => {
 
   const m3u8 = new MediaM3u8(SPECIMEN)
   const resolver = new TargetResolver(
-    keyLine => keyLine,
-    value => value
+    (keyLine) => keyLine,
+    (value) => value
   )
 
   it('should not detect exhaustion', () => {

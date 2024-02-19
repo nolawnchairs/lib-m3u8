@@ -1,8 +1,8 @@
 
-import { MediaM3u8 } from '../src/media-m3u8.class'
-import { M3u8Slicer } from '../src/m3u8-slicer.class'
-import { TargetResolver } from '../src/util/target-resolver.util'
 import { M3u8Tag } from '../src/enums/m3u8-tag.enum'
+import { M3u8Slicer } from '../src/m3u8-slicer.class'
+import { MediaM3u8 } from '../src/media-m3u8.class'
+import { TargetResolver } from '../src/util/target-resolver.util'
 
 const SPECIMEN = `
 #EXTM3U
@@ -38,8 +38,8 @@ const SPECIMEN = `
 describe('immutable slice modifiers', () => {
 
   const resolver = new TargetResolver(
-    value => value.replace('encryption.key', '/keys/12345/encryption.key'),
-    value => `https://example.com/${value}`
+    (value) => value.replace('encryption.key', '/keys/12345/encryption.key'),
+    (value) => `https://example.com/${value}`
   )
   const m3u8 = new MediaM3u8(SPECIMEN)
   const slicer = new M3u8Slicer(m3u8, resolver)
@@ -48,9 +48,9 @@ describe('immutable slice modifiers', () => {
     const slice = slicer.toVodSlice(0, m3u8.segmentCount())
     const inserted1 = slice.insertMeta(M3u8Tag.EXT_X_BYTERANGE, '12345@0')
     const inserted2 = slice.insertMeta(M3u8Tag.EXT_X_BYTERANGE, '12345@0', ({ tag }) => tag == M3u8Tag.EXT_X_MEDIA_SEQUENCE)
-    expect(inserted1.meta.find(line => line.tag === M3u8Tag.EXT_X_BYTERANGE)?.content).toBe('#EXT-X-BYTERANGE:12345@0')
-    expect(inserted2.meta.findIndex(line => line.tag === M3u8Tag.EXT_X_BYTERANGE)).toBe(4)
-    expect(inserted2.meta.findIndex(line => line.tag === M3u8Tag.EXT_X_MEDIA_SEQUENCE)).toBe(3)
+    expect(inserted1.meta.find((line) => line.tag === M3u8Tag.EXT_X_BYTERANGE)?.content).toBe('#EXT-X-BYTERANGE:12345@0')
+    expect(inserted2.meta.findIndex((line) => line.tag === M3u8Tag.EXT_X_BYTERANGE)).toBe(4)
+    expect(inserted2.meta.findIndex((line) => line.tag === M3u8Tag.EXT_X_MEDIA_SEQUENCE)).toBe(3)
   })
 
   it('should throw an error if meta tag already exists', () => {
@@ -66,13 +66,13 @@ describe('immutable slice modifiers', () => {
   it('should modify valid meta tags', () => {
     const slice = slicer.toVodSlice(0, m3u8.segmentCount())
     const modified = slice.modifyMeta(M3u8Tag.EXT_X_TARGETDURATION, () => '10')
-    expect(modified.meta.find(line => line.tag === M3u8Tag.EXT_X_TARGETDURATION)?.value).toBe('10')
+    expect(modified.meta.find((line) => line.tag === M3u8Tag.EXT_X_TARGETDURATION)?.value).toBe('10')
   })
 
   it('should omit valid meta tags', () => {
     const slice = slicer.toVodSlice(0, m3u8.segmentCount())
     const modified = slice.omitMeta(M3u8Tag.EXT_X_PLAYLIST_TYPE)
-    expect(modified.meta.find(line => line.tag === M3u8Tag.EXT_X_PLAYLIST_TYPE)).toBeUndefined()
+    expect(modified.meta.find((line) => line.tag === M3u8Tag.EXT_X_PLAYLIST_TYPE)).toBeUndefined()
   })
 
   it('should throw an error if meta tag not found', () => {
@@ -88,21 +88,21 @@ describe('immutable slice modifiers', () => {
       ...rest,
       source: source.replace('example.com', 'example.org'),
     }))
-    expect(modified.segments.every(segment => segment.source.includes('example.org'))).toBe(true)
+    expect(modified.segments.every((segment) => segment.source.includes('example.org'))).toBe(true)
   })
 
   it('should modify a segment\'s metadata', () => {
     const slice = slicer.toVodSlice(0, 5)
     const modified = slice.modifySegmentMeta(
       M3u8Tag.EXT_X_KEY, ({ value }) => value.replace('/keys/', 'https://example.com/keys/'))
-    expect(modified.segments.some(segment => segment.meta.find(line =>
+    expect(modified.segments.some((segment) => segment.meta.find((line) =>
       line.tag === M3u8Tag.EXT_X_KEY)?.content.includes('example.com'))).toBe(true)
   })
 
   it('should omit segment metadata', () => {
     const slice = slicer.toVodSlice(0, 5)
     const modified = slice.omitSegmentMeta(M3u8Tag.EXT_X_KEY)
-    expect(modified.segments.every(segment => segment.meta.find(line =>
+    expect(modified.segments.every((segment) => segment.meta.find((line) =>
       line.tag === M3u8Tag.EXT_X_KEY))).toBe(false)
   })
 

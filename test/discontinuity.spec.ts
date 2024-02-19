@@ -1,9 +1,8 @@
 
-import { MediaM3u8 } from '../src/media-m3u8.class'
-import { M3u8Slicer } from '../src/m3u8-slicer.class'
-import { TargetResolver } from '../src/util/target-resolver.util'
 import { M3u8Tag } from '../src/enums/m3u8-tag.enum'
-import { inspect } from 'util'
+import { M3u8Slicer } from '../src/m3u8-slicer.class'
+import { MediaM3u8 } from '../src/media-m3u8.class'
+import { TargetResolver } from '../src/util/target-resolver.util'
 
 const SPECIMEN_1 = `
 #EXTM3U
@@ -57,13 +56,13 @@ describe('appending discontinuity', () => {
   const second = new MediaM3u8(SPECIMEN_2)
 
   const firstResolver = new TargetResolver(
-    keyLine => keyLine.replace('encryption.key', '/keys/12345/encryption.key'),
-    value => `http://example.com/12345/${value}`
+    (keyLine) => keyLine.replace('encryption.key', '/keys/12345/encryption.key'),
+    (value) => `http://example.com/12345/${value}`
   )
 
   const secondResolver = new TargetResolver(
-    keyLine => keyLine.replace('encryption.key', '/keys/67890/encryption.key'),
-    value => `http://example.com/67890/${value}`
+    (keyLine) => keyLine.replace('encryption.key', '/keys/67890/encryption.key'),
+    (value) => `http://example.com/67890/${value}`
   )
 
   let firstSlicer: M3u8Slicer
@@ -129,7 +128,6 @@ describe('appending discontinuity', () => {
     const slice2 = secondSlicer.toLiveSlice(0, 0, 1)
     expect(slice1.segments.length).toBe(0)
     expect(slice2.segments.length).toBe(1)
-    const slice3 = slice1.withDiscontinuity(slice2)
   })
 
   it('should only contain one EXT-X-DISCONTINUITY tag per slice added', () => {
@@ -142,8 +140,8 @@ describe('appending discontinuity', () => {
       .withDiscontinuity(slice3)
       .withDiscontinuity(slice4)
     expect(finished.segments.length).toBe(4)
-    expect(finished.segments.filter(s => s.meta.some(m => m.content === '#EXT-X-DISCONTINUITY')).length).toBe(3)
-    expect(finished.marshal().split('\n').filter(l => l === '#EXT-X-DISCONTINUITY').length).toBe(3)
+    expect(finished.segments.filter((s) => s.meta.some((m) => m.content === '#EXT-X-DISCONTINUITY')).length).toBe(3)
+    expect(finished.marshal().split('\n').filter((l) => l === '#EXT-X-DISCONTINUITY').length).toBe(3)
   })
 
   it('should only contain one EXT-X-DISCONTINUITY tag per slice with > 0 segmetns', () => {
@@ -156,8 +154,8 @@ describe('appending discontinuity', () => {
       .withDiscontinuity(slice3)
       .withDiscontinuity(slice4)
     expect(finished.segments.length).toBe(2)
-    expect(finished.segments.filter(s => s.meta.some(m => m.content === '#EXT-X-DISCONTINUITY')).length).toBe(2)
-    expect(finished.marshal().split('\n').filter(l => l === '#EXT-X-DISCONTINUITY').length).toBe(2)
+    expect(finished.segments.filter((s) => s.meta.some((m) => m.content === '#EXT-X-DISCONTINUITY')).length).toBe(2)
+    expect(finished.marshal().split('\n').filter((l) => l === '#EXT-X-DISCONTINUITY').length).toBe(2)
   })
 
   it('should remove duplicate discontinuity tags during marshaling', () => {
@@ -167,6 +165,6 @@ describe('appending discontinuity', () => {
     const toDuplicate = combined.segments[2].meta[0]
     combined.segments[2].meta.unshift(toDuplicate)
     const marshaled = combined.marshal()
-    expect(marshaled.split('\n').filter(l => l === '#EXT-X-DISCONTINUITY').length).toBe(1)
+    expect(marshaled.split('\n').filter((l) => l === '#EXT-X-DISCONTINUITY').length).toBe(1)
   })
 })

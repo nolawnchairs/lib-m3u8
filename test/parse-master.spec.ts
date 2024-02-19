@@ -1,9 +1,9 @@
 
 import { M3u8LineType } from '../src/enums/m3u8-line-type.enum'
-import { IM3u8Line } from '../src/interfaces/m3u8-line.interface'
-import { M3u8Parser } from '../src/util/m3u8-parser.util'
-import { MasterM3u8 } from '../src/master-m3u8.class'
 import { M3u8Type } from '../src/enums/m3u8-type.enum'
+import { IM3u8Line } from '../src/interfaces/m3u8-line.interface'
+import { MasterM3u8 } from '../src/master-m3u8.class'
+import { M3u8Parser } from '../src/util/m3u8-parser.util'
 
 const SPECIMEN = `
 #EXTM3U
@@ -62,7 +62,7 @@ describe('Parsing a master.m3u8 file', () => {
   })
 
   it('should find a total of 2 variants', () => {
-    expect(example.filter(line => line.type === M3u8LineType.VARIANT_META).length).toBe(2)
+    expect(example.filter((line) => line.type === M3u8LineType.VARIANT_META).length).toBe(2)
     expect(m3u8.variants.length).toBe(2)
   })
 })

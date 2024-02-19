@@ -1,6 +1,6 @@
 
-import { MediaM3u8 } from '../src/media-m3u8.class'
 import { MasterM3u8 } from '../src/master-m3u8.class'
+import { MediaM3u8 } from '../src/media-m3u8.class'
 
 const MASTER = `
 #EXTM3U

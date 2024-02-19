@@ -1,6 +1,6 @@
 
-import { MediaM3u8 } from '../src/media-m3u8.class'
 import { M3u8Slicer } from '../src/m3u8-slicer.class'
+import { MediaM3u8 } from '../src/media-m3u8.class'
 import { TargetResolver } from '../src/util/target-resolver.util'
 
 const SPECIMEN = `
@@ -28,8 +28,8 @@ describe('url and path resolvers', () => {
 
   it('should retain the initial values', () => {
     const resolver = new TargetResolver(
-      keyLine => keyLine,
-      value => value
+      (keyLine) => keyLine,
+      (value) => value
     )
     const slicer = new M3u8Slicer(m3u8, resolver)
     const sliced = slicer.toLiveSlice(0, 0, 1)
@@ -39,8 +39,8 @@ describe('url and path resolvers', () => {
 
   it('should apply the specified pipe to the EXT-X-KEY entry', () => {
     const resolver = new TargetResolver(
-      keyLine => keyLine.replace('encryption.key', '/keys/encryption.key'),
-      value => value
+      (keyLine) => keyLine.replace('encryption.key', '/keys/encryption.key'),
+      (value) => value
     )
     const slicer = new M3u8Slicer(m3u8, resolver)
     const sliced = slicer.toLiveSlice(0, 0, 1)
@@ -50,8 +50,8 @@ describe('url and path resolvers', () => {
 
   it('should apply the specified pipe to the segment source', () => {
     const resolver = new TargetResolver(
-      keyLine => keyLine,
-      value => `http://www.example.com/${value}`
+      (keyLine) => keyLine,
+      (value) => `http://www.example.com/${value}`
     )
     const slicer = new M3u8Slicer(m3u8, resolver)
     const sliced = slicer.toLiveSlice(0, 0, 1)
@@ -61,8 +61,8 @@ describe('url and path resolvers', () => {
 
   it('should apply the pipe to the second key after discontinuity', () => {
     const resolver = new TargetResolver(
-      keyLine => keyLine.replace('encryption.key', 'http://www.example.com/keys/encryption.key'),
-      value => `http://www.example.com/${value}`
+      (keyLine) => keyLine.replace('encryption.key', 'http://www.example.com/keys/encryption.key'),
+      (value) => `http://www.example.com/${value}`
     )
     const slicer = new M3u8Slicer(m3u8, resolver)
     const sliced = slicer.toLiveSlice(0, 0, 3)

@@ -1,3 +1,4 @@
+
 import { IM3u8Line } from './m3u8-line.interface'
 
 export interface IM3u8Variant {

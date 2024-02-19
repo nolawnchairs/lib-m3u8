@@ -1,3 +1,4 @@
+
 import { M3u8 } from '../src/m3u8.class'
 
 const MASTER_SPECIMEN = `

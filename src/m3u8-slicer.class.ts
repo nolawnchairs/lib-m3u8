@@ -123,7 +123,7 @@ export class M3u8Slicer {
     const slice = count ? this.m3u8.segments.slice(start, last) : []
 
     // Insert key line into 0th segment's 0th meta line if it doesn't exist
-    if (keyLine && slice.length && !slice[0].meta.some(line => line.tag === M3u8Tag.EXT_X_KEY)) {
+    if (keyLine && slice.length && !slice[0].meta.some((line) => line.tag === M3u8Tag.EXT_X_KEY)) {
       slice[0].meta.unshift(keyLine)
     }
 
@@ -163,7 +163,7 @@ export class M3u8Slicer {
     const slice = this.m3u8.segments.slice(start, last)
 
     // Insert key line into 0th segment's 0th meta line if it doesn't exist
-    if (keyLine && slice.length && !slice[0].meta.some(line => line.tag === M3u8Tag.EXT_X_KEY)) {
+    if (keyLine && slice.length && !slice[0].meta.some((line) => line.tag === M3u8Tag.EXT_X_KEY)) {
       slice[0].meta.unshift(keyLine)
     }
 
@@ -219,8 +219,8 @@ export class M3u8Slicer {
           meta.push(
             M3u8Builder.createSegmentMetaLine(
               M3u8Tag.EXT_X_KEY,
-              this.resolver.resolveEncryptionKeyUrl(m.value),
-            ),
+              this.resolver.resolveEncryptionKeyUrl(m.value)
+            )
           )
         } else {
           meta.push(m)

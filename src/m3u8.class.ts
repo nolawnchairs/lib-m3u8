@@ -53,7 +53,7 @@ export abstract class M3u8 {
    * @memberof M3u8
    */
   findLineByTag(tag: M3u8Tag): IM3u8Line {
-    return this.lines.find(line => line.tag === tag)
+    return this.lines.find((line) => line.tag === tag)
   }
 
   /**
@@ -65,7 +65,7 @@ export abstract class M3u8 {
    * @memberof M3u8
    */
   findLineTypeByTag(type: M3u8LineType, tag: M3u8Tag): IM3u8Line {
-    return this.lines.find(line => line.type === type && line.tag === tag)
+    return this.lines.find((line) => line.type === type && line.tag === tag)
   }
 
   /**

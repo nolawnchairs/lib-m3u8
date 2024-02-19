@@ -1,10 +1,10 @@
 
 import { M3u8LineType } from '../src/enums/m3u8-line-type.enum'
 import { M3u8Tag } from '../src/enums/m3u8-tag.enum'
-import { IM3u8Line } from '../src/interfaces/m3u8-line.interface'
-import { M3u8Parser } from '../src/util/m3u8-parser.util'
-import { MediaM3u8 } from '../src/media-m3u8.class'
 import { M3u8Type } from '../src/enums/m3u8-type.enum'
+import { IM3u8Line } from '../src/interfaces/m3u8-line.interface'
+import { MediaM3u8 } from '../src/media-m3u8.class'
+import { M3u8Parser } from '../src/util/m3u8-parser.util'
 import { TargetResolver } from '../src/util/target-resolver.util'
 
 const SPECIMEN = `
@@ -91,8 +91,8 @@ describe('parsing a media m3u8 file', () => {
   })
 
   it('should find 10 segments', () => {
-    expect(example.filter(l => l.type === M3u8LineType.SEGMENT_META).length).toBe(11)
-    expect(example.filter(l => l.type === M3u8LineType.SEGMENT_SRC).length).toBe(10)
+    expect(example.filter((l) => l.type === M3u8LineType.SEGMENT_META).length).toBe(11)
+    expect(example.filter((l) => l.type === M3u8LineType.SEGMENT_SRC).length).toBe(10)
   })
 
   it('should identify the last segment', () => {

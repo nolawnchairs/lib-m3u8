@@ -1,3 +1,4 @@
+
 import { M3u8Tag } from '../src/enums/m3u8-tag.enum'
 import { M3u8Slicer } from '../src/m3u8-slicer.class'
 import { MediaM3u8 } from '../src/media-m3u8.class'
@@ -44,8 +45,8 @@ http://example.com/67890/960x540-2000kbps_fd33e3f4aed0ae41.ts
 
 describe('clone slices', () => {
   const resolver = new TargetResolver(
-    value => value.replace('encryption.key', '/keys/12345/encryption.key'),
-    value => `https://example.com/12345/${value}`
+    (value) => value.replace('encryption.key', '/keys/12345/encryption.key'),
+    (value) => `https://example.com/12345/${value}`
   )
   const m3u8 = new MediaM3u8(SPECIMEN)
   const slicer = new M3u8Slicer(m3u8, resolver)

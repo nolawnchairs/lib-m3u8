@@ -25,19 +25,19 @@ export class MediaM3u8 extends M3u8 {
   constructor(content: string) {
     super(M3u8Parser.parse(content, M3u8Type.MEDIA))
 
-    const segmentLines = this.lines.filter(line => [M3u8LineType.SEGMENT_META, M3u8LineType.SEGMENT_SRC].includes(line.type))
+    const segmentLines = this.lines.filter((line) => [M3u8LineType.SEGMENT_META, M3u8LineType.SEGMENT_SRC].includes(line.type))
     const segmentSourceIndicies = segmentLines
       .map((line, index) => ({ line, index }))
       .filter(({ line }) => line.type === M3u8LineType.SEGMENT_SRC)
       .map(({ index }) => index)
 
-    this.meta = this.lines.filter(line => line.type === M3u8LineType.META)
+    this.meta = this.lines.filter((line) => line.type === M3u8LineType.META)
     let lastIndex = 0
 
     while (this.segments.length < segmentSourceIndicies.length) {
       const segmentSourceIndex = segmentSourceIndicies[this.segments.length]
       const metaLines = segmentLines.slice(lastIndex, segmentSourceIndex)
-      const duration = metaLines.find(line => line.content.startsWith(M3u8Tag.EXTINF))?.content.split(':')[1]
+      const duration = metaLines.find((line) => line.content.startsWith(M3u8Tag.EXTINF))?.content.split(':')[1]
       this.segments.push({
         meta: M3u8Parser.uniqueLineByTag(metaLines),
         source: segmentLines[segmentSourceIndex].content,

@@ -60,7 +60,7 @@ export class M3u8Slice implements IM3u8Producer {
    * @memberof M3u8Slice
    */
   insertMeta(tag: M3u8Tag, value: string, after?: Predicate): M3u8Slice {
-    if (this.meta.some(line => line.tag === tag)) {
+    if (this.meta.some((line) => line.tag === tag)) {
       throw new Error(`Metadata tag ${tag} already exists`)
     }
     const clone = this.clone()
@@ -87,7 +87,7 @@ export class M3u8Slice implements IM3u8Producer {
    */
   modifyMeta(tag: M3u8Tag, modifier: MetaModifier): M3u8Slice {
     const clone = this.clone()
-    const index = clone.meta.findIndex(line => line.tag === tag)
+    const index = clone.meta.findIndex((line) => line.tag === tag)
     if (!~index) {
       throw new Error(`Metadata tag ${tag} not found`)
     }
@@ -105,7 +105,7 @@ export class M3u8Slice implements IM3u8Producer {
    */
   omitMeta(tag: M3u8Tag): M3u8Slice {
     const clone = this.clone()
-    const index = clone.meta.findIndex(line => line.tag === tag)
+    const index = clone.meta.findIndex((line) => line.tag === tag)
     if (!~index) {
       throw new Error(`Metadata tag ${tag} not found`)
     }
@@ -143,12 +143,12 @@ export class M3u8Slice implements IM3u8Producer {
    */
   modifySegmentMeta(tag: M3u8Tag, modifier: SegmentMetaModifier): M3u8Slice {
     const clone = this.clone()
-    const hasTag = clone.segments.some(segment => segment.meta.some(line => line.tag === tag))
+    const hasTag = clone.segments.some((segment) => segment.meta.some((line) => line.tag === tag))
     if (!hasTag) {
       throw new Error(`Segment metadata tag ${tag} not found`)
     }
     clone.segments.forEach((segment, index) => {
-      const metaIndex = segment.meta.findIndex(line => line.tag === tag)
+      const metaIndex = segment.meta.findIndex((line) => line.tag === tag)
       if (~metaIndex) {
         const modifiedValue = modifier(segment.meta[metaIndex], index, metaIndex)
         clone.segments[index].meta[metaIndex] = M3u8Builder.createSegmentMetaLine(tag, modifiedValue)
@@ -168,12 +168,12 @@ export class M3u8Slice implements IM3u8Producer {
    */
   omitSegmentMeta(tag: M3u8Tag): M3u8Slice {
     const clone = this.clone()
-    const hasTag = clone.segments.some(segment => segment.meta.some(line => line.tag === tag))
+    const hasTag = clone.segments.some((segment) => segment.meta.some((line) => line.tag === tag))
     if (!hasTag) {
       throw new Error(`Segment metadata tag ${tag} not found`)
     }
     clone.segments.forEach((segment, index) => {
-      const metaIndex = segment.meta.findIndex(line => line.tag === tag)
+      const metaIndex = segment.meta.findIndex((line) => line.tag === tag)
       if (~metaIndex) {
         clone.segments[index].meta.splice(metaIndex, 1)
       }
@@ -198,7 +198,7 @@ export class M3u8Slice implements IM3u8Producer {
         ...first,
         meta: [
           M3u8Builder.createSegmentMetaLine(M3u8Tag.EXT_X_DISCONTINUITY, ''),
-          ...first.meta.filter(line => line.tag !== M3u8Tag.EXT_X_DISCONTINUITY),
+          ...first.meta.filter((line) => line.tag !== M3u8Tag.EXT_X_DISCONTINUITY),
         ],
       })
       if (rest.length) {
@@ -225,7 +225,7 @@ export class M3u8Slice implements IM3u8Producer {
         ...first,
         meta: [
           M3u8Builder.createSegmentMetaLine(M3u8Tag.EXT_X_DISCONTINUITY, ''),
-          ...first.meta.filter(line => line.tag !== M3u8Tag.EXT_X_DISCONTINUITY),
+          ...first.meta.filter((line) => line.tag !== M3u8Tag.EXT_X_DISCONTINUITY),
         ],
       })
       if (rest.length) {
@@ -256,10 +256,10 @@ export class M3u8Slice implements IM3u8Producer {
    */
   clone(): M3u8Slice {
     return new M3u8Slice(
-      this.meta.map(line => ({ ...line })),
-      this.segments.map(segment => ({
+      this.meta.map((line) => ({ ...line })),
+      this.segments.map((segment) => ({
         ...segment,
-        meta: segment.meta.map(line => ({ ...line })),
+        meta: segment.meta.map((line) => ({ ...line })),
       })),
       this.offsetMillis,
       this.mediaExhausted,

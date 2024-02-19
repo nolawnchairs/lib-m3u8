@@ -28,13 +28,13 @@ export class MasterM3u8 extends M3u8 {
   constructor(content: string) {
     super(M3u8Parser.parse(content, M3u8Type.MASTER))
 
-    const variantLines = this.lines.filter(line => [M3u8LineType.VARIANT_META, M3u8LineType.VARIANT_SRC].includes(line.type))
+    const variantLines = this.lines.filter((line) => [M3u8LineType.VARIANT_META, M3u8LineType.VARIANT_SRC].includes(line.type))
     const variantSourceIndicies = variantLines
       .map((line, index) => ({ line, index }))
       .filter(({ line }) => line.type === M3u8LineType.VARIANT_SRC)
       .map(({ index }) => index)
 
-    this.meta = this.lines.filter(line => line.type === M3u8LineType.META)
+    this.meta = this.lines.filter((line) => line.type === M3u8LineType.META)
     let lastIndex = 0
     while (this.variants.length < variantSourceIndicies.length) {
       const metaLines = variantLines.slice(lastIndex, variantSourceIndicies[this.variants.length])

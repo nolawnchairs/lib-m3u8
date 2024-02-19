@@ -6,7 +6,7 @@ import { IM3u8Line } from '../interfaces/m3u8-line.interface'
 
 export namespace M3u8Parser {
 
-  const TAGS_BY_TYPE: Record<M3u8Tag, M3u8LineType> = {
+  const tagMappings: Record<M3u8Tag, M3u8LineType> = {
     [M3u8Tag.EXT_M3U]: M3u8LineType.HEADER,
     [M3u8Tag.EXT_X_VERSION]: M3u8LineType.META,
     [M3u8Tag.EXT_X_TARGETDURATION]: M3u8LineType.META,
@@ -37,9 +37,9 @@ export namespace M3u8Parser {
     [M3u8Tag.EXT_X_MONTAGE_SOURCE_SEQUENCE]: M3u8LineType.MONTAGE_META,
   }
 
-  const META_TAGS = Object.keys(TAGS_BY_TYPE).filter(key => TAGS_BY_TYPE[key] == M3u8LineType.META)
-  const SEGMENT_META_TAGS = Object.keys(TAGS_BY_TYPE).filter(key => TAGS_BY_TYPE[key] == M3u8LineType.SEGMENT_META)
-  const VARIANT_META_TAGS = Object.keys(TAGS_BY_TYPE).filter(key => TAGS_BY_TYPE[key] == M3u8LineType.VARIANT_META)
+  const metaTags = Object.keys(tagMappings).filter((key) => tagMappings[key] == M3u8LineType.META)
+  const segmentMetaTags = Object.keys(tagMappings).filter((key) => tagMappings[key] == M3u8LineType.SEGMENT_META)
+  const variantMetaTags = Object.keys(tagMappings).filter((key) => tagMappings[key] == M3u8LineType.VARIANT_META)
 
   /**
    * Parse the contents of an m3u8-formatted string into an array of m3u8 lines.
@@ -51,18 +51,18 @@ export namespace M3u8Parser {
    */
   export function parse(contents: string, type: M3u8Type): IM3u8Line[] {
 
-    const lines = contents.split('\n').filter(line => line.trim().length > 0)
+    const lines = contents.split('\n').filter((line) => line.trim().length > 0)
 
     // Guard against attempting to parse a master playlist without the #EXT-X-STREAM-INF tag
     if (type === M3u8Type.MASTER) {
-      if (!lines.some(line => line.startsWith(M3u8Tag.EXT_X_STREAM_INF))) {
+      if (!lines.some((line) => line.startsWith(M3u8Tag.EXT_X_STREAM_INF))) {
         throw new Error(`The provided content is not a master M3u8 playlist. (${M3u8Tag.EXT_X_STREAM_INF} tag not found)`)
       }
     }
 
     // Guard against attempting to parse a media playlist without the #EXTINF tag
     if (type === M3u8Type.MEDIA) {
-      if (!lines.some(line => line.startsWith(M3u8Tag.EXTINF))) {
+      if (!lines.some((line) => line.startsWith(M3u8Tag.EXTINF))) {
         throw new Error(`The provided content is not a media M3u8 playlist. (${M3u8Tag.EXTINF} tag not found)`)
       }
     }
@@ -79,19 +79,19 @@ export namespace M3u8Parser {
       }
 
       // Detect if a line is a meta tag
-      if (~META_TAGS.findIndex(tag => line.startsWith(tag))) {
+      if (~metaTags.findIndex((tag) => line.startsWith(tag))) {
         m3u8Lines.push({ type: M3u8LineType.META, content: line, ...parseContentLine(line) })
         continue
       }
 
       // Detect if a line is a segment meta tag
-      if (~SEGMENT_META_TAGS.findIndex(tag => line.startsWith(tag))) {
+      if (~segmentMetaTags.findIndex((tag) => line.startsWith(tag))) {
         m3u8Lines.push({ type: M3u8LineType.SEGMENT_META, content: line, ...parseContentLine(line) })
         continue
       }
 
       // Detect if a line is a variant meta tag
-      if (~VARIANT_META_TAGS.findIndex(tag => line.startsWith(tag))) {
+      if (~variantMetaTags.findIndex((tag) => line.startsWith(tag))) {
         m3u8Lines.push({ type: M3u8LineType.VARIANT_META, content: line, ...parseContentLine(line) })
         continue
       }
@@ -144,7 +144,7 @@ export namespace M3u8Parser {
    */
   export function uniqueLineByTag(lines: IM3u8Line[]): IM3u8Line[] {
     const seen = []
-    return lines.filter(line => {
+    return lines.filter((line) => {
       if (seen.includes(line.tag)) {
         return false
       }
