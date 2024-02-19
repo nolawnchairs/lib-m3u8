@@ -1,4 +1,11 @@
-# 1.3.2 (Current)
+# 1.4.0 (Current)
+
+ * Added `SerializationCodec` class for encoding/decoding m3u8 files for network transmission more efficiently.
+ * Updated development dependencies.
+ * Typescript definitions now generated with native `tsc` compiler.
+ * Changed eslint configuration to use knightinteractie eslint config.
+
+# 1.3.2
 
  * Ensure segment meta tags are unique per segment
  * Small performance improvements
