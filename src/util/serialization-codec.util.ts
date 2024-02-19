@@ -65,7 +65,6 @@ export class SerializationCodec {
     const output = new Array<SerializationData>()
     for (const chunk of chunks) {
       const [rawHeaders, payload] = chunk.split('-----')
-      console.log({ rawHeaders, payload })
       const headers = rawHeaders.trim().split('\n').reduce((acc, header) => {
         const [key, value] = header.split(':')
         acc[key.trim()] = value.trim()
