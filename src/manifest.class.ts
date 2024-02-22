@@ -4,8 +4,8 @@ import { IM3u8Line } from './interfaces/m3u8-line.interface'
 import { IM3u8Producer } from './interfaces/m3u8-producer.interface'
 import { IM3u8Variant } from './interfaces/m3u8-variant.interface'
 
-type VariantModifier = (variant: IM3u8Variant) => IM3u8Variant
-type VariantPredicate = (variant: IM3u8Variant) => boolean
+export type VariantModifier = (variant: IM3u8Variant) => IM3u8Variant
+export type VariantPredicate = (variant: IM3u8Variant) => boolean
 
 export class Manifest implements IM3u8Producer {
 
