@@ -1,4 +1,8 @@
-# 1.4.0 (Current)
+# 1.4.1 (Current)
+
+* Exported utility types `VariantModifier` and `VariantPredicate`.
+
+# 1.4.0
 
  * Added `SerializationCodec` class for encoding/decoding m3u8 files for network transmission more efficiently.
  * Updated development dependencies.
