@@ -69,7 +69,23 @@ export class MediaM3u8 extends M3u8 {
    * @memberof MediaM3u8
    */
   asSlice(resolver?: TargetResolver): M3u8Slice {
-    return new M3u8Slicer(this, resolver)
+    if (resolver) {
+      return new M3u8Slicer(this, resolver)
+        .toResolvedSlice()
+    }
+    return new M3u8Slicer(this)
       .toVodSlice(0, this.segmentCount())
+  }
+
+  /**
+   * Resolve the media m3u8 using the specified resolver
+   *
+   * @param {TargetResolver} resolver
+   * @return {*}  {M3u8Slice}
+   * @memberof MediaM3u8
+   */
+  resolve(resolver: TargetResolver): M3u8Slice {
+    return new M3u8Slicer(this, resolver)
+      .toResolvedSlice()
   }
 }

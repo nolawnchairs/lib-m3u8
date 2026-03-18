@@ -5,9 +5,9 @@ A library to parse and create variants of M3u8 manifest files.
 
 ## Installation
 
-npm install `@knightinteractive/m3u8`
+npm install `@nolawnchairs/m3u8`
 
-> **Note**: This is a private NPM library, so a valid API token must be provided to install. It is also a proprietary library, with the assumption that it is used exclusively with the **Montage** platform, assuming all opinions it imposes.
+> **Note**: This is a private NPM library used internally. No guarantees are made about the stability or quality of the library.
 
 ## Usage
 

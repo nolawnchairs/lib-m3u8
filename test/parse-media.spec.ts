@@ -5,7 +5,6 @@ import { M3u8Type } from '../src/enums/m3u8-type.enum'
 import { IM3u8Line } from '../src/interfaces/m3u8-line.interface'
 import { MediaM3u8 } from '../src/media-m3u8.class'
 import { M3u8Parser } from '../src/util/m3u8-parser.util'
-import { TargetResolver } from '../src/util/target-resolver.util'
 
 const SPECIMEN = `
 #EXTM3U
@@ -120,7 +119,7 @@ describe('parsing a media m3u8 file', () => {
   })
 
   it('should correctly format a VOD slice', () => {
-    const slice = m3u8.asSlice(TargetResolver.default())
+    const slice = m3u8.asSlice()
     expect(slice.meta.length).toBe(4)
     expect(slice.segments.length).toBe(10)
     expect(slice.segments[0].source).toBe('960x540-2000kbps_f8a1ae2a59a2b2f7.ts')

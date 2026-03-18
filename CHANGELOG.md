@@ -1,4 +1,12 @@
-# 1.4.1 (Current)
+# 1.5.0
+
+**Migrated to @nolawnchairs/m3u8**
+
+* Added `MasterM3u8#resolve` method that resolves the master m3u8 using the specified resolver
+* Added `MediaM3u8#resolve` method that resolves the media m3u8 using the specified resolver
+* Exported `VariantResolver` type as a shortcut to only modify the source URL of a variant
+
+# 1.4.1
 
 * Exported utility types `VariantModifier` and `VariantPredicate`.
 

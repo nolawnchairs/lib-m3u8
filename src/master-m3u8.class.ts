@@ -4,7 +4,7 @@ import { M3u8Type } from './enums/m3u8-type.enum'
 import { IM3u8Line } from './interfaces/m3u8-line.interface'
 import { IM3u8Variant } from './interfaces/m3u8-variant.interface'
 import { M3u8 } from './m3u8.class'
-import { Manifest } from './manifest.class'
+import { Manifest, VariantResolver } from './manifest.class'
 import { M3u8Parser } from './util/m3u8-parser.util'
 
 export class MasterM3u8 extends M3u8 {
@@ -58,5 +58,17 @@ export class MasterM3u8 extends M3u8 {
    */
   asManifest(): Manifest {
     return new Manifest(this.meta, this.variants)
+  }
+
+  /**
+   * Resolve the master m3u8 using the specified resolver
+   *
+   * @param {VariantResolver} resolver
+   * @return {*}  {Manifest}
+   * @memberof MasterM3u8
+   */
+  resolve(resolver: VariantResolver): Manifest {
+    return this.asManifest()
+      .modifyEachVariant(({ meta, source }) => ({ meta, source: resolver(source) }))
   }
 }
