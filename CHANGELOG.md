@@ -1,3 +1,7 @@
+# 1.6.0 (Current)
+
+Improved parsing and resolving of `EXT-X-KEY` segment meta tags to ensure the key line is properly parsed, modified, and re-marshaled with the resolved URL.
+
 # 1.5.0
 
 **Migrated to @nolawnchairs/m3u8**
