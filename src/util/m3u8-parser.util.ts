@@ -2,6 +2,7 @@
 import { M3u8LineType } from '../enums/m3u8-line-type.enum'
 import { M3u8Tag } from '../enums/m3u8-tag.enum'
 import { M3u8Type } from '../enums/m3u8-type.enum'
+import { IM3u8KeyLine } from '../interfaces/m3u8-key-line.interface'
 import { IM3u8Line } from '../interfaces/m3u8-line.interface'
 
 export namespace M3u8Parser {
@@ -151,5 +152,48 @@ export namespace M3u8Parser {
       seen.push(line.tag)
       return true
     })
+  }
+
+  const specKeyAttributes = ['METHOD', 'URI', 'IV', 'KEYFORMAT', 'KEYFORMATVERSIONS']
+
+  export function parseKeyLine(line: IM3u8Line): IM3u8KeyLine {
+    if (line.tag !== M3u8Tag.EXT_X_KEY) {
+      throw new Error(`Line ${line.content} is not a key line.`)
+    }
+
+    const attributes = line.value.split(',').reduce((acc, pair) => {
+      const [key, value] = pair.split('=')
+      if (specKeyAttributes.includes(key)) {
+        acc[key] = value.replace(/"/g, '')
+      }
+      return acc
+    }, {} as Record<string, string>)
+
+    return {
+      method: attributes['METHOD'],
+      uri: attributes['URI'],
+      iv: attributes['IV'],
+      keyFormat: attributes['KEYFORMAT'],
+      keyFormatVersions: attributes['KEYFORMATVERSIONS'],
+    }
+  }
+
+  export function writeKeyLine(keyLine: IM3u8KeyLine): string {
+    const attributes = []
+    if (!keyLine.method || !keyLine.uri) {
+      throw new Error('Key line must include at least \'method\' and \'uri\' attributes.')
+    }
+    attributes.push(`METHOD=${keyLine.method}`)
+    attributes.push(`URI="${keyLine.uri}"`)
+    if (keyLine.iv) {
+      attributes.push(`IV=${keyLine.iv}`)
+    }
+    if (keyLine.keyFormat) {
+      attributes.push(`KEYFORMAT="${keyLine.keyFormat}"`)
+    }
+    if (keyLine.keyFormatVersions) {
+      attributes.push(`KEYFORMATVERSIONS="${keyLine.keyFormatVersions}"`)
+    }
+    return attributes.join(',')
   }
 }

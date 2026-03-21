@@ -216,10 +216,12 @@ export class M3u8Slicer {
       // Copy meta, resolving the encryption key URL
       for (const m of segment.meta) {
         if (m.tag === M3u8Tag.EXT_X_KEY) {
+          const keyLine = M3u8Parser.parseKeyLine(m)
+          keyLine.uri = this.resolver.resolveEncryptionKeyUrl(keyLine.uri)
           meta.push(
             M3u8Builder.createSegmentMetaLine(
               M3u8Tag.EXT_X_KEY,
-              this.resolver.resolveEncryptionKeyUrl(m.value)
+              M3u8Parser.writeKeyLine(keyLine)
             )
           )
         } else {
