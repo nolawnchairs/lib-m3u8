@@ -1,6 +1,6 @@
 {
   "name": "@nolawnchairs/m3u8",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Library for parsing, manipulating and producing ad-hoc m3u8 files for HLS",
   "main": "lib/index.js",
   "author": "Mike <nolawnchairs@gmail.com>",
